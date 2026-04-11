@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>亲密游戏</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --pink: #d4537e;
+  --pink-light: #fdeef4;
+  --pink-mid: #f0a0c0;
+  --blue: #4a90d9;
+  --blue-light: #eef4fd;
+  --blue-mid: #90c0f0;
+  --bg: #faf8f5;
+  --bg2: #f2f0ec;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --text2: #888;
+  --text3: #bbb;
+  --border: #eeecec;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --transition: 0.18s ease;
+  /* fluid type */
+  --fs-xs: clamp(10px, 1.8vw, 12px);
+  --fs-sm: clamp(12px, 2.2vw, 14px);
+  --fs-md: clamp(13px, 2.5vw, 15px);
+  --fs-lg: clamp(16px, 3vw, 20px);
+  --fs-xl: clamp(22px, 5vw, 34px);
+}
+html { font-size: 16px; }
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  overflow-x: hidden;
+}
+
+/* ── Screen system ── */
+.screen { display: none; flex-direction: column; min-height: 100vh; }
+.screen.active { display: flex; }
+
+/* ── HOME ── */
+#s-home {
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 5vw, 4rem) clamp(1rem, 5vw, 2rem);
+  background: var(--bg);
+}
+.home-inner { width: 100%; max-width: 480px; }
+.home-badge {
+  display: inline-block;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.2em;
+  color: var(--pink);
+  background: var(--pink-light);
+  border-radius: 20px;
+  padding: 4px 14px;
+  margin-bottom: 1rem;
+}
+.home-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: var(--fs-xl);
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+.home-title span {
+  background: linear-gradient(135deg, #e05580, #e8906a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.home-sub { font-size: var(--fs-sm); color: var(--text3); margin-bottom: clamp(1.5rem, 4vw, 2.5rem); }
+.entry-list { display: flex; flex-direction: column; gap: clamp(10px, 2vw, 14px); }
+.ecard {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: clamp(1rem, 3vw, 1.3rem) clamp(1rem, 3vw, 1.4rem);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2.5vw, 16px);
+  border: 1.5px solid transparent;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.ecard:active { transform: scale(0.97); }
+.ecard.c1 { border-color: #f0d0dc; }
+.ecard.c2 { border-color: #d8d0f0; }
+.ecard.c3 { border-color: #f0d8c0; }
+.ecard.c1:hover { box-shadow: 0 4px 20px rgba(210,80,120,0.14); }
+.ecard.c2:hover { box-shadow: 0 4px 20px rgba(120,80,200,0.14); }
+.ecard.c3:hover { box-shadow: 0 4px 20px rgba(200,120,60,0.14); }
+.eicon {
+  width: clamp(44px, 8vw, 54px);
+  height: clamp(44px, 8vw, 54px);
+  border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(20px, 4vw, 26px);
+  flex-shrink: 0;
+}
+.c1 .eicon { background: #fdeef3; }
+.c2 .eicon { background: #eeeafc; }
+.c3 .eicon { background: #fef3ea; }
+.einfo { flex: 1; min-width: 0; }
+.etitle { font-family: 'Noto Serif SC', serif; font-size: var(--fs-md); font-weight: 700; margin-bottom: 3px; }
+.c1 .etitle { color: #d04070; }
+.c2 .etitle { color: #7040c0; }
+.c3 .etitle { color: #c06020; }
+.edesc { font-size: var(--fs-xs); color: var(--text2); line-height: 1.55; }
+.earrow { font-size: 1.2rem; color: #ddd; flex-shrink: 0; }
+
+/* ── TOPBAR ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: clamp(.85rem, 3vw, 1.2rem) clamp(1rem, 4vw, 1.5rem) 0;
+  background: var(--bg);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 0.5px solid transparent;
+}
+.back-btn {
+  background: none; border: none;
+  color: var(--text2); cursor: pointer;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: var(--fs-sm);
+  padding: 6px 0;
+  display: flex; align-items: center; gap: 3px;
+}
+.back-btn:hover { color: var(--text); }
+.topbar-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ── SETUP (Truth) ── */
+#s-setup .topbar, #s-truth .topbar { border-bottom-color: var(--border); }
+.setup-body {
+  flex: 1;
+  padding: clamp(1rem, 4vw, 1.5rem) clamp(1rem, 4vw, 1.5rem) 2rem;
+  overflow-y: auto;
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+}
+.setup-section { margin-bottom: 1.5rem; }
+.setup-label {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text2);
+  margin-bottom: 0.6rem;
+  display: flex; align-items: center; gap: 7px;
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-m { background: var(--blue); }
+.dot-f { background: var(--pink); }
+.add-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.q-inp {
+  flex: 1; min-width: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--fs-sm);
+  padding: 0.55rem 0.85rem;
+  font-family: 'Noto Sans SC', sans-serif;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.q-inp:focus { outline: none; border-color: var(--pink); }
+.add-btn {
+  background: var(--card);
+  border: 1.5px solid var(--pink);
+  border-radius: var(--radius-sm);
+  color: var(--pink);
+  font-size: var(--fs-xs);
+  padding: 0.55rem clamp(0.6rem, 2vw, 1rem);
+  cursor: pointer;
+  flex-shrink: 0;
+  font-family: 'Noto Sans SC', sans-serif;
+  white-space: nowrap;
+}
+.add-btn:hover { background: var(--pink-light); }
+.tag-list { display: flex; flex-wrap: wrap; gap: 6px; min-height: 28px; }
+.q-tag {
+  border-radius: 20px; padding: 4px 10px;
+  font-size: var(--fs-xs);
+  display: flex; align-items: center; gap: 5px;
+}
+.q-tag.male { background: var(--blue-light); border: 1px solid #c0d8f5; color: #3a70b0; }
+.q-tag.female { background: var(--pink-light); border: 1px solid #f5c0d0; color: #c04070; }
+.q-tag .del { cursor: pointer; color: #ccc; font-size: 0.9rem; line-height: 1; }
+.q-tag .del:hover { color: var(--pink); }
+.start-game-btn {
+  width: 100%; padding: clamp(.8rem, 2.5vw, 1rem);
+  border: none; border-radius: var(--radius);
+  background: linear-gradient(135deg, #d4567a, #e8906a);
+  color: white;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: var(--fs-md); font-weight: 500;
+  letter-spacing: 0.08em; cursor: pointer;
+  margin-top: 0.5rem;
+  transition: opacity var(--transition);
+}
+.start-game-btn:hover { opacity: 0.9; }
+.start-game-btn:active { transform: scale(0.98); }
+.preset-hint { font-size: var(--fs-xs); color: var(--text3); text-align: center; margin-top: 0.6rem; }
+
+/* ── TRUTH GAME ── */
+.truth-game {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  align-self: stretch;
+}
+.player-col {
+  flex: 1; display: flex; flex-direction: column;
+  border-right: 1px solid var(--border);
+  min-width: 0;
+}
+.player-col:last-child { border-right: none; }
+.pcol-header {
+  padding: clamp(.6rem, 2vw, .85rem) clamp(.75rem, 3vw, 1rem);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 6px;
+  flex-shrink: 0;
+}
+.pcol-header .pname { font-size: var(--fs-sm); font-weight: 500; }
+.pcol-header .pidx { font-size: var(--fs-xs); color: var(--text3); margin-left: auto; }
+.male-header { background: #f0f6ff; }
+.female-header { background: #fff0f5; }
+.pcol-body {
+  flex: 1; padding: clamp(.75rem, 3vw, 1rem) clamp(.75rem, 3vw, 1rem);
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+.q-box {
+  flex: 1; background: var(--card);
+  border-radius: var(--radius); padding: clamp(.85rem, 3vw, 1.1rem);
+  border: 1px solid var(--border); margin-bottom: 0.75rem;
+  display: flex; align-items: center; justify-content: center;
+  min-height: clamp(100px, 20vw, 160px);
+}
+.q-text {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(0.82rem, 2.2vw, 0.98rem);
+  font-weight: 600; line-height: 1.7; color: var(--text); text-align: center;
+}
+.q-text.placeholder { color: var(--text3); font-size: var(--fs-sm); font-weight: 400; font-family: 'Noto Sans SC', sans-serif; }
+.next-q-btn {
+  padding: clamp(.6rem, 2vw, .75rem);
+  border: none; border-radius: var(--radius-sm);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: var(--fs-sm); font-weight: 500;
+  cursor: pointer; width: 100%;
+  transition: opacity var(--transition);
+}
+.next-q-btn:hover { opacity: 0.88; }
+.next-q-btn:active { transform: scale(0.97); }
+.btn-male { background: linear-gradient(135deg, #4a90d9, #60b0e8); color: white; }
+.btn-female { background: linear-gradient(135deg, #d4567a, #e87a9e); color: white; }
+.qnum { font-size: var(--fs-xs); color: var(--text3); text-align: center; margin-top: 5px; }
+
+/* ── BOTTLE ── */
+#s-bottle { background: var(--bg); }
+.bottle-page {
+  flex: 1;
+  padding: clamp(1rem, 3vw, 1.5rem) clamp(.85rem, 3vw, 1.25rem) 2rem;
+  overflow-y: auto;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+}
+.bottle-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem; gap: 10px;
+}
+.bottle-header-left h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: var(--fs-lg); font-weight: 600; margin-bottom: 2px;
+}
+.bottle-header-left p { font-size: var(--fs-xs); color: var(--text3); }
+.save-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: clamp(6px, 1.5vw, 8px) clamp(12px, 2.5vw, 16px);
+  border-radius: 20px; border: none;
+  background: var(--text); color: #fff;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: var(--fs-xs); cursor: pointer;
+  transition: opacity var(--transition);
+  white-space: nowrap; flex-shrink: 0;
+}
+.save-btn:hover { opacity: 0.82; }
+.btabs {
+  display: flex; gap: 0; margin-bottom: 1.1rem;
+  background: var(--bg2); border-radius: 10px; padding: 3px;
+}
+.btab {
+  flex: 1; padding: clamp(5px, 1.5vw, 7px) 0;
+  border-radius: 8px; font-size: var(--fs-sm);
+  text-align: center; cursor: pointer; color: var(--text2);
+  transition: all var(--transition);
+}
+.btab.active { background: var(--card); color: var(--text); font-weight: 500; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+.bgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(60px, 12vw, 88px), 1fr));
+  gap: clamp(6px, 1.5vw, 10px) clamp(4px, 1vw, 6px);
+}
+.bwrap {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 5px; cursor: crosshair; border-radius: 10px;
+  padding: clamp(4px, 1.5vw, 7px) clamp(2px, 1vw, 4px);
+  transition: background var(--transition);
+  touch-action: none;
+}
+.bwrap:hover, .bwrap.touching { background: #f5f0f8; }
+.bwrap.confirmed { background: #fef6fa; }
+.blabel {
+  font-size: clamp(9px, 1.8vw, 11px); color: var(--text2);
+  text-align: center; line-height: 1.35;
+  min-height: 24px; display: flex; align-items: center; justify-content: center;
+  transition: color var(--transition);
+}
+.bwrap.confirmed .blabel { color: #c04878; font-weight: 500; }
+.bfooter {
+  margin-top: 1rem; padding: .7rem 1rem;
+  background: var(--card); border-radius: 12px;
+  border: .5px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.bfooter-dot { width: 7px; height: 7px; border-radius: 50%; background: #e090b0; flex-shrink: 0; }
+.bfooter-text { font-size: var(--fs-xs); color: var(--text2); flex: 1; line-height: 1.45; }
+
+/* ── CHESS ── */
+#s-chess { background: var(--bg); }
+.chess-wrap { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.chess-scroll { flex: 1; overflow-y: auto; padding: clamp(.75rem, 2vw, 1rem); }
+.board {
+  display: grid; gap: 3px; margin: 0 auto;
+}
+.cell {
+  border-radius: 6px; padding: 3px; display: flex; align-items: center;
+  justify-content: center; text-align: center;
+  font-size: clamp(7px, 1.3vw, 10px); line-height: 1.25; color: #333;
+  min-height: clamp(36px, 7vw, 50px); position: relative; cursor: pointer;
+  transition: transform 0.1s;
+}
+.cell:active { transform: scale(0.93); }
+.cell.normal { background: #fff; border: 1px solid #eee; }
+.cell.start { background: linear-gradient(135deg,#4a90d9,#70b0e8); color: white; font-weight: 600; }
+.cell.end { background: linear-gradient(135deg,#e05070,#f08060); color: white; font-weight: 700; }
+.cell.special { background: #fff9e6; border: 1.5px solid #f0c060; }
+.cell.back { background: #ffeaea; border: 1.5px solid #f09090; }
+.cell.male-only { background: #e8f2ff; border: 1.5px solid #90b8e8; }
+.cell.female-only { background: #fff0f5; border: 1.5px solid #e890b0; }
+.cell.drink { background: #f0fff0; border: 1.5px solid #90d090; }
+.cell.rest { background: #f5f5f5; border: 1px solid #ddd; color: #aaa; }
+.cell.empty { background: transparent; border: none; pointer-events: none; }
+.cell.runway { background: #eef6ff; border: 1px dashed #aacce8; pointer-events: none; }
+.cell-num { position: absolute; bottom: 2px; left: 3px; font-size: 7px; color: #ccc; opacity: 0.6; }
+.pawn {
+  display: inline-flex; width: clamp(13px,2.5vw,18px); height: clamp(13px,2.5vw,18px);
+  border-radius: 50%; font-size: clamp(8px,1.5vw,11px); align-items: center;
+  justify-content: center; position: absolute; top: 2px; right: 2px; font-weight: 700;
+}
+.pawn-m { background: #4a90d9; color: white; }
+.pawn-f { background: #e05070; color: white; right: clamp(14px,2.8vw,20px); }
+.dice-area {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: clamp(.75rem, 2vw, 1rem);
+  background: var(--card); border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.dice-row { display: flex; gap: clamp(8px, 2vw, 12px); flex-wrap: wrap; justify-content: center; }
+.dice-btn {
+  padding: clamp(7px,1.5vw,10px) clamp(1rem,3vw,1.5rem);
+  border: none; border-radius: var(--radius-sm);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: var(--fs-sm); font-weight: 500; cursor: pointer;
+  transition: opacity var(--transition);
+}
+.dice-btn:hover { opacity: 0.88; }
+.dice-btn:active { transform: scale(0.96); }
+.dice-btn.m { background: linear-gradient(135deg,#4a90d9,#60b0e8); color: white; }
+.dice-btn.f { background: linear-gradient(135deg,#d4567a,#e87a9e); color: white; }
+.dice-result { font-size: var(--fs-sm); color: var(--text2); text-align: center; min-height: 20px; }
+
+/* ── TASK POPUP ── */
+.popup-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.45);
+  align-items: flex-end; justify-content: center;
+  padding: 0 0 env(safe-area-inset-bottom, 0);
+}
+.popup-overlay.show { display: flex; }
+@media (min-width: 600px) {
+  .popup-overlay { align-items: center; }
+  .task-card { border-radius: var(--radius) !important; max-width: 400px !important; margin: 1rem; }
+}
+.task-card {
+  background: var(--card);
+  border-radius: var(--radius) var(--radius) 0 0;
+  padding: clamp(1.25rem, 4vw, 1.75rem) clamp(1.25rem, 4vw, 1.5rem);
+  width: 100%; max-width: 480px; text-align: center;
+}
+.task-label { font-size: var(--fs-xs); letter-spacing: 0.15em; color: var(--text3); margin-bottom: 0.75rem; }
+.task-content {
+  font-family: 'Noto Serif SC', serif;
+  font-size: var(--fs-lg); font-weight: 700;
+  line-height: 1.65; color: var(--text); margin-bottom: 1.25rem;
+}
+.task-close {
+  padding: clamp(0.6rem,2vw,.75rem) 2.5rem;
+  border: none; border-radius: var(--radius-sm);
+  background: linear-gradient(135deg,#d4567a,#e8906a);
+  color: white; font-family: 'Noto Sans SC', sans-serif;
+  font-size: var(--fs-sm); cursor: pointer; font-weight: 500;
+}
+
+/* ── Legend ── */
+.legend { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 clamp(.75rem,2vw,1rem) .6rem; }
+.leg-item { display: flex; align-items: center; gap: 4px; font-size: clamp(9px,1.6vw,11px); color: var(--text2); }
+.leg-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+/* ── Responsive tweaks ── */
+@media (max-width: 360px) {
+  .bgrid { grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); }
+}
+@media (min-width: 768px) {
+  .bgrid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+  .truth-game { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+}
+@media (min-width: 1024px) {
+  .bgrid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HOME ══ -->
+<div class="screen active" id="s-home">
+  <div id="s-home" style="flex:1;display:flex;align-items:center;justify-content:center;padding:clamp(1.5rem,5vw,4rem) clamp(1rem,5vw,2rem)">
+    <div class="home-inner">
+      <div class="home-badge">COUPLES ONLY</div>
+      <div class="home-title">亲密<span>游戏</span></div>
+      <div class="home-sub">专为你们设计的升温小游戏合集</div>
+      <div class="entry-list">
+        <div class="ecard c1" onclick="go('s-setup')">
+          <div class="eicon">💬</div>
+          <div class="einfo">
+            <div class="etitle">真心话</div>
+            <div class="edesc">三个阶段 · 男女各自答题<br>可以加自己想问的专属问题</div>
+          </div>
+          <div class="earrow">›</div>
+        </div>
+        <div class="ecard c2" onclick="go('s-bottle')">
+          <div class="eicon">🫙</div>
+          <div class="einfo">
+            <div class="etitle">性癖小瓶子</div>
+            <div class="edesc">根据喜欢程度填满瓶子<br>看看你们的重叠有多少</div>
+          </div>
+          <div class="earrow">›</div>
+        </div>
+        <div class="ecard c3" onclick="go('s-chess')">
+          <div class="eicon">✈️</div>
+          <div class="einfo">
+            <div class="etitle">情侣飞行棋</div>
+            <div class="edesc">双人掷骰子 · 落格做任务<br>先到终点赢</div>
+          </div>
+          <div class="earrow">›</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TRUTH SETUP ══ -->
+<div class="screen" id="s-setup">
+  <div class="topbar">
+    <button class="back-btn" onclick="go('s-home')">← 返回</button>
+    <span class="topbar-title">真心话 · 准备</span>
+  </div>
+  <div class="setup-body">
+    <div class="setup-section">
+      <div class="setup-label"><span class="dot dot-m"></span>给男生加题目（选填）</div>
+      <div class="add-row">
+        <input class="q-inp" id="inp-m" placeholder="输入想问男生的问题…" onkeydown="if(event.key==='Enter')addQ('m')">
+        <button class="add-btn" onclick="addQ('m')">添加</button>
+      </div>
+      <div class="tag-list" id="tags-m"></div>
+    </div>
+    <div class="setup-section">
+      <div class="setup-label"><span class="dot dot-f"></span>给女生加题目（选填）</div>
+      <div class="add-row">
+        <input class="q-inp" id="inp-f" placeholder="输入想问女生的问题…" onkeydown="if(event.key==='Enter')addQ('f')">
+        <button class="add-btn" onclick="addQ('f')">添加</button>
+      </div>
+      <div class="tag-list" id="tags-f"></div>
+    </div>
+    <button class="start-game-btn" onclick="startTruth()">开始游戏</button>
+    <div class="preset-hint">不加也可以，直接用预设题目开始</div>
+  </div>
+</div>
+
+<!-- ══ TRUTH GAME ══ -->
+<div class="screen" id="s-truth">
+  <div class="topbar">
+    <button class="back-btn" onclick="go('s-home')">← 返回</button>
+    <span class="topbar-title">真心话</span>
+  </div>
+  <div class="truth-game">
+    <div class="player-col">
+      <div class="pcol-header male-header">
+        <span style="font-size:16px">💙</span>
+        <span class="pname" style="color:#3a70b0">男生</span>
+        <span class="pidx" id="m-idx">1/20</span>
+      </div>
+      <div class="pcol-body">
+        <div class="q-box"><div class="q-text placeholder" id="m-q">点击下方按钮开始</div></div>
+        <button class="next-q-btn btn-male" onclick="nextQ('m')">下一题</button>
+        <div class="qnum" id="m-qnum"></div>
+      </div>
+    </div>
+    <div class="player-col">
+      <div class="pcol-header female-header">
+        <span style="font-size:16px">🩷</span>
+        <span class="pname" style="color:#c04070">女生</span>
+        <span class="pidx" id="f-idx">1/20</span>
+      </div>
+      <div class="pcol-body">
+        <div class="q-box"><div class="q-text placeholder" id="f-q">点击下方按钮开始</div></div>
+        <button class="next-q-btn btn-female" onclick="nextQ('f')">下一题</button>
+        <div class="qnum" id="f-qnum"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BOTTLE ══ -->
+<div class="screen" id="s-bottle">
+  <div class="topbar">
+    <button class="back-btn" onclick="go('s-home')">← 返回</button>
+    <span class="topbar-title" style="color:#7040c0">性癖小瓶子</span>
+  </div>
+  <div class="bottle-page" id="bottle-capture">
+    <div class="bottle-header">
+      <div class="bottle-header-left">
+        <h3>性癖小瓶子</h3>
+        <p>移动鼠标/手指调液位 · 单击确认 · 再次单击清除</p>
+      </div>
+      <button class="save-btn" onclick="saveBottleImg()">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1v9M4 7l4 4 4-4M2 12v1a1 1 0 001 1h10a1 1 0 001-1v-1" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        保存图片
+      </button>
+    </div>
+    <div class="btabs">
+      <div class="btab active" onclick="switchBTab(0,this)">行为偏好</div>
+      <div class="btab" onclick="switchBTab(1,this)">场景地点</div>
+    </div>
+    <div class="bgrid" id="bgrid"></div>
+    <div class="bfooter"><div class="bfooter-dot"></div><span class="bfooter-text" id="bfooter">还没有确认任何偏好，移到瓶子上开始</span></div>
+  </div>
+</div>
+
+<!-- ══ CHESS ══ -->
+<div class="screen" id="s-chess">
+  <div class="topbar">
+    <button class="back-btn" onclick="go('s-home')">← 返回</button>
+    <span class="topbar-title" style="color:#c06020">情侣飞行棋</span>
+  </div>
+  <div class="chess-wrap">
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot" style="background:#fff9e6;border:1.5px solid #f0c060"></div>任务格</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#ffeaea;border:1.5px solid #f09090"></div>后退</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#e8f2ff;border:1.5px solid #90b8e8"></div>男生专属</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#fff0f5;border:1.5px solid #e890b0"></div>女生专属</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#f0fff0;border:1.5px solid #90d090"></div>喝酒</div>
+    </div>
+    <div class="chess-scroll"><div id="chess-board"></div></div>
+    <div class="dice-area">
+      <div class="dice-row">
+        <button class="dice-btn m" onclick="rollDice('m')">💙 男生掷骰子</button>
+        <button class="dice-btn f" onclick="rollDice('f')">🩷 女生掷骰子</button>
+      </div>
+      <div class="dice-result" id="dice-result">准备好了吗？掷骰子开始！</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TASK POPUP ══ -->
+<div class="popup-overlay" id="task-popup">
+  <div class="task-card">
+    <div class="task-label" id="task-who"></div>
+    <div class="task-content" id="task-text"></div>
+    <button class="task-close" onclick="closeTask()">知道了，完成！</button>
+  </div>
+</div>
+
+<script>
+/* ══ DATA ══ */
+const QM = ["上一次哭是因为什么？","用三个形容词形容一下你自己","最近一年最开心的一件事是什么？","如果墓碑上只能刻一句话，你会刻什么？","做过最丢人的一件事是什么？","你相信男女之间有纯友谊吗？为什么？","你觉得自己最大的缺点是什么？","你有没有什么别人不知道的小习惯？","你最后悔没做的一件事是什么？","如果可以改变人生中的一个决定，你会改变哪个？","你有没有特别羡慕过某个人？羡慕他什么？","你觉得你和大多数人最不一样的地方是什么？","你有没有一段时间特别讨厌自己？是因为什么？","你人生中最孤独的一段时光是什么时候？","你最害怕失去的东西是什么？","对方让你觉得心动的三个瞬间是什么？","喜欢对方的三个理由，认真说","说出三个对方的缺点，真实的","精神出轨和肉体出轨，你更能接受哪一个？","在床上你喜欢自己主动还是对方主动？","最喜欢哪个体位？","你有没有什么特别敏感的部位？","更喜欢有毛还是白虎？","最喜欢射在哪里？"];
+const QF = ["用三个形容词形容一下你自己","上一次哭是因为什么？","你觉得自己最大的缺点是什么？","做过最丢人的一件事是什么？","你有没有什么别人不知道的小习惯？","你最后悔没做的一件事是什么？","你相信男女之间有纯友谊吗？为什么？","如果墓碑上只能刻一句话，你会刻什么？","你最害怕失去的东西是什么？","如果今晚是你最后一晚，你会做什么？","你有没有一段时间特别讨厌自己？是因为什么？","你人生中最孤独的一段时光是什么时候？","你有没有从来没跟任何人说过的秘密？","对方让你觉得心动的三个瞬间是什么？","喜欢对方的三个理由","说出三个对方的缺点，真实的","精神出轨和肉体出轨，你更能接受哪一个？","在床上你喜欢自己主动还是对方主动？","最喜欢哪个体位？","你有没有什么特别敏感的部位？","粗、长、硬，给你排个顺序","最喜欢被射在哪里？"];
+
+const BOTTLE_CATS = [
+  {name:'行为偏好',items:['舌吻','被舔耳朵','被舔乳头','指交/帮撸','被口','帮对方口','种草莓','S属性','M属性','女上位','传教士','后入','肛交','乳交','无套','内射','口爆','潮吹','性窒息','打屁股','下流话','制服','3P/群P','公共场合','道具','录像/拍照','角色扮演','浴室/客厅']},
+  {name:'场景地点',items:['浴室','厨房','落地窗前','卧室','客厅','瑜伽垫','车里','后院','户外','私人影院','天台','酒店','舞蹈室','餐桌','帐篷','摄影棚','沙发','游轮','沙滩','办公室','草丛','教室','摩天轮','厕所','椅子','浴缸','游泳池','秋千','树林','楼道','野外','体育馆','网吧','图书馆','画室']}
+];
+
+const CHESS_CELLS = [
+  {t:'start',l:'起点\n出发'},{t:'special',l:'掷骰子'},{t:'rest',l:'下一轮\n休息'},{t:'drink',l:'喝半杯'},
+  {t:'special',l:'口交至对方\n流水或坚挺10秒'},{t:'special',l:'舔对方\n耳根10秒'},{t:'special',l:'用嘴喂对方\n喝一口酒'},{t:'drink',l:'喝半杯'},
+  {t:'special',l:'为对方\n脱一件衣物'},{t:'special',l:'对方坐在脸上\n吸吮30秒'},
+  {t:'special',l:'为对方\n脱一件衣物'},{t:'special',l:'手伸进对方内裤\n随意发挥30秒'},{t:'special',l:'吮吸对方脖子\n种一颗草莓'},
+  {t:'back',l:'后退3格\n并脱一件'},{t:'special',l:'为对方\n撸管或抠逼1分钟'},{t:'drink',l:'喝半杯'},
+  {t:'male-only',l:'男生\n专属格'},{t:'special',l:'后入抽插\n对方1分钟'},{t:'special',l:'从背后抱住\n随意抚摸1分钟'},
+  {t:'special',l:'为对方\n口交3分钟'},{t:'special',l:'让对方喝酒\n每杯转账5.2元'},{t:'special',l:'舔对方\n乳头1分钟'},
+  {t:'end',l:'🏆终点\n先到者赢'},
+  {t:'special',l:'为对方\n口交3分钟'},{t:'special',l:'自己喝酒\n每杯对方转账13.14'},{t:'special',l:'选喜欢姿势\n让对方插10下'},
+  {t:'special',l:'观音坐莲\n自己动10下'},{t:'special',l:'喂对方喝\n一口自己口水'},{t:'female-only',l:'女生\n专属格'},
+  {t:'drink',l:'喝半杯'},{t:'rest',l:'下一轮\n休息'},{t:'special',l:'与对方\n舌吻30秒'},
+  {t:'special',l:'舔大腿内侧10秒\n笑场罚酒'},{t:'rest',l:'下一轮\n休息'},{t:'special',l:'从耳根舔\n到锁骨'},{t:'drink',l:'喝半杯'},
+  {t:'special',l:'手伸进对方内裤\n随意发挥30秒'},{t:'special',l:'自己脱\n一件衣物'},{t:'special',l:'打对方\n屁股3下'},
+  {t:'special',l:'为对方\n脱一件衣物'},{t:'back',l:'后退6格\n并脱一件'},{t:'drink',l:'喝半杯'},{t:'rest',l:'下一轮\n休息'},{t:'drink',l:'喝半杯'},
+  {t:'special',l:'露出私处\n允许对方拍照一张'},{t:'special',l:'指定一个地方\n让对方吸草莓'},{t:'special',l:'手伸进对方裤子\n随意发挥30秒'},
+  {t:'special',l:'男生停留此格\n女生咬乳头10秒'},{t:'back',l:'退回起点'},{t:'back',l:'后退3格\n并脱一件'},{t:'drink',l:'喝一杯'}
+];
+
+/* ── Navigation ── */
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 's-chess') buildBoard();
+  if (id === 's-bottle') renderBottle();
+  window.scrollTo(0, 0);
+}
+
+/* ── Truth ── */
+let customM = [], customF = [], mQueue = [], fQueue = [], mIdx = 0, fIdx = 0;
+
+function addQ(g) {
+  const inp = document.getElementById('inp-' + g);
+  const v = inp.value.trim(); if (!v) return;
+  (g === 'm' ? customM : customF).push(v);
+  inp.value = '';
+  renderTags(g);
+}
+function renderTags(g) {
+  const arr = g === 'm' ? customM : customF;
+  document.getElementById('tags-' + g).innerHTML = arr.map((q, i) =>
+    `<div class="q-tag ${g === 'm' ? 'male' : 'female'}">${q}<span class="del" onclick="delQ('${g}',${i})">×</span></div>`
+  ).join('');
+}
+function delQ(g, i) { (g === 'm' ? customM : customF).splice(i, 1); renderTags(g); }
+function shuffle(a) { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[b[i], b[j]] = [b[j], b[i]]; } return b; }
+function startTruth() {
+  mQueue = shuffle([...QM, ...customM]);
+  fQueue = shuffle([...QF, ...customF]);
+  mIdx = 0; fIdx = 0;
+  renderQ('m'); renderQ('f');
+  go('s-truth');
+}
+function renderQ(g) {
+  const queue = g === 'm' ? mQueue : fQueue;
+  const idx = g === 'm' ? mIdx : fIdx;
+  const el = document.getElementById(g + '-q');
+  el.textContent = queue[idx] || '题目已全部完成 🎉';
+  el.className = 'q-text';
+  document.getElementById(g === 'm' ? 'm-idx' : 'f-idx').textContent = `${idx + 1}/${queue.length}`;
+}
+function nextQ(g) {
+  if (g === 'm') mIdx = (mIdx + 1) % mQueue.length;
+  else fIdx = (fIdx + 1) % fQueue.length;
+  renderQ(g);
+}
+
+/* ── Bottle ── */
+let bTab = 0, bLevels = [{}, {}], bHoverName = null, bHoverLevel = 50;
+
+function switchBTab(i, el) {
+  bTab = i;
+  document.querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderBottle();
+}
+
+function bottleSVG(lv, tabIdx) {
+  const W = 46, H = 64;
+  const neckX = W * .30, neckW = W * .40, neckH = H * .13;
+  const bX = W * .09, bW = W * .82, bTop = H * .23, bH = H * .70, rx = W * .18;
+  const fillH = Math.round(bH * lv / 100);
+  const fillY = bTop + bH - fillH;
+  const id = `b${tabIdx}${W}`;
+  const c = tabIdx === 0
+    ? { fill: '#f0a0c0', stroke: '#d4537e', empty: '#fdf5f8' }
+    : { fill: '#90c0f0', stroke: '#4a90d9', empty: '#f2f7fd' };
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    <defs><clipPath id="cp${id}"><rect x="${bX}" y="${bTop}" width="${bW}" height="${bH}" rx="${rx}"/></clipPath></defs>
+    <rect x="${neckX}" y="2" width="${neckW}" height="${neckH + 2}" rx="${W * .07}" fill="${c.empty}" stroke="${c.stroke}" stroke-width="1.1"/>
+    <rect x="${bX}" y="${bTop}" width="${bW}" height="${bH}" rx="${rx}" fill="${c.empty}" stroke="${c.stroke}" stroke-width="1.2"/>
+    ${fillH > 0 ? `<rect x="${bX}" y="${fillY}" width="${bW}" height="${fillH}" fill="${c.fill}" clip-path="url(#cp${id})"/>
+    <rect x="${bX + bW * .15}" y="${fillY + 1}" width="${bW * .07}" height="${Math.min(fillH - 2, bH)}" fill="rgba(255,255,255,.45)" clip-path="url(#cp${id})"/>` : ''}
+    <rect x="${bX}" y="${bTop}" width="${bW}" height="${bH}" rx="${rx}" fill="none" stroke="${c.stroke}" stroke-width="1.2"/>
+    ${lv > 5 ? `<text x="${W / 2}" y="${fillY > bTop + 14 ? fillY - 2 : bTop + bH - 3}" text-anchor="middle" font-size="8" fill="${c.stroke}" font-family="sans-serif">${lv}%</text>` : ''}
+  </svg>`;
+}
+
+function renderBottle() {
+  const items = BOTTLE_CATS[bTab].items;
+  const grid = document.getElementById('bgrid');
+  grid.innerHTML = items.map(name => {
+    const lv = bLevels[bTab][name] || 0;
+    const confirmed = lv > 0;
+    return `<div class="bwrap${confirmed ? ' confirmed' : ''}" data-name="${name}"
+      onmouseenter="bEnter('${name}')"
+      onmouseleave="bLeave('${name}')"
+      onmousemove="bMove(event,'${name}')"
+      onclick="bClick('${name}')"
+      ontouchstart="bTouchStart(event,'${name}')"
+      ontouchmove="bTouchMove(event,'${name}')"
+      ontouchend="bTouchEnd(event,'${name}')">
+      ${bottleSVG(lv, bTab)}
+      <div class="blabel">${name}</div>
+    </div>`;
+  }).join('');
+  updateBFooter();
+}
+
+function bGetLevel(e, wrap) {
+  const svg = wrap.querySelector('svg');
+  if (!svg) return 50;
+  const r = svg.getBoundingClientRect();
+  const bTop = r.top + r.height * .23, bBot = r.top + r.height * .93;
+  const y = Math.max(bTop, Math.min(bBot, e.clientY));
+  return Math.round(100 - (y - bTop) / (bBot - bTop) * 100);
+}
+
+function bUpdateSVG(name, lv) {
+  const wrap = document.querySelector(`.bwrap[data-name="${name}"]`);
+  if (!wrap) return;
+  const old = wrap.querySelector('svg');
+  if (old) old.remove();
+  wrap.insertAdjacentHTML('afterbegin', bottleSVG(lv, bTab));
+}
+
+function bEnter(name) { bHoverName = name; }
+function bLeave(name) {
+  bHoverName = null;
+  bUpdateSVG(name, bLevels[bTab][name] || 0);
+}
+function bMove(e, name) {
+  const wrap = e.currentTarget;
+  const lv = bGetLevel(e, wrap);
+  bHoverLevel = lv;
+  bUpdateSVG(name, lv);
+}
+function bClick(name) {
+  const lv = bLevels[bTab][name] || 0;
+  if (lv > 0) { delete bLevels[bTab][name]; renderBottle(); return; }
+  bLevels[bTab][name] = bHoverLevel;
+  renderBottle();
+}
+
+/* Touch support */
+let touchName = null, touchActive = false;
+function bTouchStart(e, name) { e.preventDefault(); touchName = name; touchActive = true; bHoverName = name; }
+function bTouchMove(e, name) {
+  if (!touchActive) return; e.preventDefault();
+  const touch = e.touches[0];
+  const wrap = document.querySelector(`.bwrap[data-name="${name}"]`);
+  if (!wrap) return;
+  const svg = wrap.querySelector('svg');
+  if (!svg) return;
+  const r = svg.getBoundingClientRect();
+  const bTop = r.top + r.height * .23, bBot = r.top + r.height * .93;
+  const y = Math.max(bTop, Math.min(bBot, touch.clientY));
+  const lv = Math.round(100 - (y - bTop) / (bBot - bTop) * 100);
+  bHoverLevel = lv;
+  bUpdateSVG(name, lv);
+}
+function bTouchEnd(e, name) {
+  if (!touchActive) return; e.preventDefault();
+  touchActive = false;
+  const lv = bLevels[bTab][name] || 0;
+  if (lv > 0) { delete bLevels[bTab][name]; renderBottle(); return; }
+  bLevels[bTab][name] = bHoverLevel;
+  renderBottle();
+}
+
+function updateBFooter() {
+  let total = 0, filled = 0; const tops = [];
+  [0, 1].forEach(ti => { BOTTLE_CATS[ti].items.forEach(n => { total++; const v = bLevels[ti][n]; if (v > 0) { filled++; if (v >= 70) tops.push(n); } }); });
+  document.getElementById('bfooter').textContent = filled === 0
+    ? '还没有确认任何偏好，移到瓶子上开始'
+    : `已确认 ${filled}/${total} 项${tops.length > 0 ? ' · 非常喜欢：' + tops.slice(0, 5).join(' · ') + (tops.length > 5 ? '…' : '') : ''}`;
+}
+
+function saveBottleImg() {
+  const btn = document.querySelector('.save-btn');
+  const orig = btn.innerHTML;
+  btn.textContent = '生成中…';
+  html2canvas(document.getElementById('bottle-capture'), { scale: 2, backgroundColor: '#faf8f5', useCORS: true }).then(canvas => {
+    const a = document.createElement('a');
+    a.download = '我的性癖小瓶子.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+    btn.innerHTML = orig;
+  });
+}
+
+/* ── Chess ── */
+let posM = 0, posF = 0;
+const ROWS = 9, COLS = 10;
+const PATH = [];
+for (let c = 0; c <= 9; c++) PATH.push([0, c]);
+for (let r = 1; r <= 8; r++) PATH.push([r, 9]);
+for (let c = 8; c >= 0; c--) PATH.push([8, c]);
+for (let r = 7; r >= 1; r--) PATH.push([r, 0]);
+for (let c = 1; c <= 8; c++) PATH.push([2, c]);
+
+function buildBoard() {
+  const container = document.getElementById('chess-board');
+  const vw = Math.min(window.innerWidth, 960);
+  const cellSize = Math.max(30, Math.floor((vw - 32) / COLS) - 3);
+  const board = document.createElement('div');
+  board.className = 'board';
+  board.style.gridTemplateColumns = `repeat(${COLS},${cellSize}px)`;
+  board.style.width = (cellSize * COLS + 3 * (COLS - 1)) + 'px';
+
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const div = document.createElement('div');
+      div.style.width = cellSize + 'px';
+      div.style.height = cellSize + 'px';
+      let ci = -1;
+      for (let i = 0; i < CHESS_CELLS.length; i++) {
+        if (PATH[i] && PATH[i][0] === r && PATH[i][1] === c) { ci = i; break; }
+      }
+      if (ci >= 0) {
+        const cell = CHESS_CELLS[ci];
+        div.className = 'cell ' + cell.t;
+        div.style.fontSize = Math.max(7, cellSize * 0.16) + 'px';
+        div.innerHTML = cell.l.replace(/\n/g, '<br>');
+        div.dataset.ci = ci;
+        div.onclick = () => showTask(ci);
+        const num = document.createElement('span');
+        num.className = 'cell-num'; num.textContent = ci;
+        div.appendChild(num);
+        if (ci === posM && ci === posF) {
+          div.insertAdjacentHTML('beforeend', `<div class="pawn pawn-m" style="right:${Math.round(cellSize*.28)}px">♂</div><div class="pawn pawn-f">♀</div>`);
+        } else if (ci === posM) {
+          div.insertAdjacentHTML('beforeend', `<div class="pawn pawn-m">♂</div>`);
+        } else if (ci === posF) {
+          div.insertAdjacentHTML('beforeend', `<div class="pawn pawn-f">♀</div>`);
+        }
+      } else {
+        const inner = r >= 1 && r <= 7 && c >= 1 && c <= 8;
+        div.className = inner && r === 4 ? 'cell runway' : 'cell empty';
+        if (inner && r === 4) div.innerHTML = '<span style="color:#acd;font-size:11px">✈</span>';
+      }
+      board.appendChild(div);
+    }
+  }
+  container.innerHTML = '';
+  container.appendChild(board);
+}
+
+function rollDice(g) {
+  const n = Math.floor(Math.random() * 6) + 1;
+  const faces = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+  const maxPos = CHESS_CELLS.length - 1;
+  if (g === 'm') posM = Math.min(posM + n, maxPos);
+  else posF = Math.min(posF + n, maxPos);
+  const pos = g === 'm' ? posM : posF;
+  document.getElementById('dice-result').textContent =
+    `${g === 'm' ? '💙 男生' : '🩷 女生'}掷出 ${faces[n]}（${n}点），移到第 ${pos} 格`;
+  buildBoard();
+  if (pos > 0 && CHESS_CELLS[pos].t !== 'empty') setTimeout(() => showTask(pos, g), 350);
+  if (pos === maxPos) setTimeout(() => {
+    document.getElementById('task-who').textContent = '🏆 游戏结束';
+    document.getElementById('task-text').textContent = (g === 'm' ? '男生' : '女生') + '先到终点！对方需要转账100元！';
+    document.getElementById('task-popup').classList.add('show');
+  }, 500);
+}
+
+function showTask(ci, who) {
+  const cell = CHESS_CELLS[ci];
+  if (!cell || cell.t === 'empty' || cell.t === 'runway' || cell.t === 'start') return;
+  document.getElementById('task-text').textContent = cell.l.replace(/\n/g, ' ');
+  document.getElementById('task-who').textContent = who === 'm' ? '💙 男生的任务' : who === 'f' ? '🩷 女生的任务' : '📍 格子内容';
+  document.getElementById('task-popup').classList.add('show');
+}
+function closeTask() { document.getElementById('task-popup').classList.remove('show'); }
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('s-chess').classList.contains('active')) buildBoard();
+});
+</script>
+</body>
+</html>

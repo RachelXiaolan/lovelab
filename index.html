@@ -3,919 +3,699 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>亲密游戏</title>
+<title>lovelab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-/* ── Reset & Base ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --pink: #d4537e;
-  --pink-light: #fdeef4;
-  --pink-mid: #f0a0c0;
-  --blue: #4a90d9;
-  --blue-light: #eef4fd;
-  --blue-mid: #90c0f0;
-  --bg: #faf8f5;
-  --bg2: #f2f0ec;
-  --card: #ffffff;
-  --text: #1a1a2e;
-  --text2: #888;
-  --text3: #bbb;
-  --border: #eeecec;
-  --radius: 14px;
-  --radius-sm: 8px;
-  --transition: 0.18s ease;
-  /* fluid type */
-  --fs-xs: clamp(10px, 1.8vw, 12px);
-  --fs-sm: clamp(12px, 2.2vw, 14px);
-  --fs-md: clamp(13px, 2.5vw, 15px);
-  --fs-lg: clamp(16px, 3vw, 20px);
-  --fs-xl: clamp(22px, 5vw, 34px);
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#d4537e;--pink-l:#fdeef4;--pink-m:#f0a0c0;
+  --blue:#4a90d9;--blue-l:#eef4fd;--blue-m:#90c0f0;
+  --bg:#faf8f5;--bg2:#f2f0ec;--card:#fff;
+  --text:#1a1a2e;--t2:#888;--t3:#bbb;--border:#eee;
+  --r:14px;--rs:8px;
 }
-html { font-size: 16px; }
-body {
-  font-family: 'Noto Sans SC', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-user-select: none;
-  user-select: none;
-  overflow-x: hidden;
-}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.screen{display:none;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+.screen.active{display:flex}
+/* topbar */
+.topbar{display:flex;align-items:center;padding:.85rem clamp(.9rem,4vw,1.4rem);gap:10px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0}
+.back-btn{display:flex;align-items:center;gap:4px;background:none;border:none;color:var(--t2);cursor:pointer;font-family:'Noto Sans SC',sans-serif;font-size:13px;padding:4px 10px 4px 0;border-radius:6px;transition:background .15s}
+.back-btn:hover{color:var(--text);background:var(--bg2)}
+.back-btn svg{width:15px;height:15px}
+.topbar-title{font-family:'Noto Serif SC',serif;font-size:15px;font-weight:700;color:var(--text)}
 
-/* ── Screen system ── */
-.screen { display: none; flex-direction: column; min-height: 100vh; }
-.screen.active { display: flex; }
+/* HOME */
+#s-home{overflow-y:auto}
+.home-wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:clamp(2rem,6vw,4rem) clamp(1.2rem,5vw,2rem)}
+.home-inner{width:100%;max-width:440px}
+.home-badge{display:inline-block;font-size:11px;letter-spacing:.18em;color:var(--pink);background:var(--pink-l);border-radius:20px;padding:4px 14px;margin-bottom:1rem}
+.home-title{font-family:'Noto Serif SC',serif;font-size:clamp(2.2rem,9vw,3.2rem);font-weight:900;line-height:1.15;margin-bottom:.3rem}
+.home-title span{background:linear-gradient(135deg,#e05580,#e8906a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.home-sub{font-size:13px;color:var(--t3);margin-bottom:clamp(1.5rem,5vw,2.5rem)}
+.entry-list{display:flex;flex-direction:column;gap:12px}
+.ecard{background:var(--card);border-radius:var(--r);padding:clamp(.95rem,3vw,1.25rem) clamp(1rem,3.5vw,1.4rem);cursor:pointer;display:flex;align-items:center;gap:14px;border:1.5px solid transparent;box-shadow:0 2px 16px rgba(0,0,0,.05);transition:transform .15s,box-shadow .15s}
+.ecard:active{transform:scale(.97)}
+.ecard.c1{border-color:#f0d0dc}.ecard.c2{border-color:#d8d0f0}.ecard.c3{border-color:#f0d8c0}
+.eicon{width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.eicon svg{width:24px;height:24px}
+.c1 .eicon{background:#fdeef3}.c2 .eicon{background:#eeeafc}.c3 .eicon{background:#fef3ea}
+.einfo{flex:1;min-width:0}
+.etitle{font-family:'Noto Serif SC',serif;font-size:15px;font-weight:700;margin-bottom:3px}
+.c1 .etitle{color:#d04070}.c2 .etitle{color:#7040c0}.c3 .etitle{color:#c06020}
+.edesc{font-size:12px;color:var(--t2);line-height:1.55}
+.earrow{color:#ccc;flex-shrink:0;font-size:20px;line-height:1}
 
-/* ── HOME ── */
-#s-home {
-  align-items: center;
-  justify-content: center;
-  padding: clamp(1.5rem, 5vw, 4rem) clamp(1rem, 5vw, 2rem);
-  background: var(--bg);
-}
-.home-inner { width: 100%; max-width: 480px; }
-.home-badge {
-  display: inline-block;
-  font-size: var(--fs-xs);
-  letter-spacing: 0.2em;
-  color: var(--pink);
-  background: var(--pink-light);
-  border-radius: 20px;
-  padding: 4px 14px;
-  margin-bottom: 1rem;
-}
-.home-title {
-  font-family: 'Noto Serif SC', serif;
-  font-size: var(--fs-xl);
-  font-weight: 900;
-  line-height: 1.2;
-  color: var(--text);
-  margin-bottom: 0.4rem;
-}
-.home-title span {
-  background: linear-gradient(135deg, #e05580, #e8906a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.home-sub { font-size: var(--fs-sm); color: var(--text3); margin-bottom: clamp(1.5rem, 4vw, 2.5rem); }
-.entry-list { display: flex; flex-direction: column; gap: clamp(10px, 2vw, 14px); }
-.ecard {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: clamp(1rem, 3vw, 1.3rem) clamp(1rem, 3vw, 1.4rem);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: clamp(10px, 2.5vw, 16px);
-  border: 1.5px solid transparent;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-  transition: transform var(--transition), box-shadow var(--transition);
-}
-.ecard:active { transform: scale(0.97); }
-.ecard.c1 { border-color: #f0d0dc; }
-.ecard.c2 { border-color: #d8d0f0; }
-.ecard.c3 { border-color: #f0d8c0; }
-.ecard.c1:hover { box-shadow: 0 4px 20px rgba(210,80,120,0.14); }
-.ecard.c2:hover { box-shadow: 0 4px 20px rgba(120,80,200,0.14); }
-.ecard.c3:hover { box-shadow: 0 4px 20px rgba(200,120,60,0.14); }
-.eicon {
-  width: clamp(44px, 8vw, 54px);
-  height: clamp(44px, 8vw, 54px);
-  border-radius: 13px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: clamp(20px, 4vw, 26px);
-  flex-shrink: 0;
-}
-.c1 .eicon { background: #fdeef3; }
-.c2 .eicon { background: #eeeafc; }
-.c3 .eicon { background: #fef3ea; }
-.einfo { flex: 1; min-width: 0; }
-.etitle { font-family: 'Noto Serif SC', serif; font-size: var(--fs-md); font-weight: 700; margin-bottom: 3px; }
-.c1 .etitle { color: #d04070; }
-.c2 .etitle { color: #7040c0; }
-.c3 .etitle { color: #c06020; }
-.edesc { font-size: var(--fs-xs); color: var(--text2); line-height: 1.55; }
-.earrow { font-size: 1.2rem; color: #ddd; flex-shrink: 0; }
+/* SETUP */
+#s-setup .sbody{flex:1;overflow-y:auto;padding:1.1rem clamp(.9rem,4vw,1.4rem) 2rem;display:flex;flex-direction:column;align-items:center}
+.setup-step{display:none;width:100%;max-width:500px}.setup-step.active{display:block}
+.setup-card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:1.25rem 1.25rem 1.5rem}
+.setup-who-row{display:flex;align-items:center;gap:10px;margin-bottom:.85rem}
+.who-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.who-avatar.m{background:var(--blue-l)}.who-avatar.f{background:var(--pink-l)}
+.who-name{font-family:'Noto Serif SC',serif;font-size:15px;font-weight:700}
+.who-name.m{color:#3a70b0}.who-name.f{color:#c04070}
+.setup-hint{font-size:12px;color:var(--t3);margin-bottom:.9rem;line-height:1.65;background:var(--bg2);border-radius:var(--rs);padding:.65rem .9rem}
+.add-row{display:flex;gap:8px;margin-bottom:10px}
+.q-inp{flex:1;min-width:0;background:#fafafa;border:1px solid var(--border);border-radius:var(--rs);color:var(--text);font-size:13px;padding:.55rem .85rem;font-family:'Noto Sans SC',sans-serif;-webkit-user-select:text;user-select:text}
+.q-inp:focus{outline:none;border-color:var(--pink)}
+.add-btn{background:var(--card);border:1.5px solid var(--pink);border-radius:var(--rs);color:var(--pink);font-size:12px;padding:.55rem .9rem;cursor:pointer;flex-shrink:0;font-family:'Noto Sans SC',sans-serif;white-space:nowrap}
+.add-btn:hover{background:var(--pink-l)}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;min-height:22px;margin-bottom:.9rem}
+.q-tag{border-radius:20px;padding:4px 10px;font-size:12px;display:flex;align-items:center;gap:5px}
+.q-tag.male{background:var(--blue-l);border:1px solid #c0d8f5;color:#3a70b0}
+.q-tag.female{background:var(--pink-l);border:1px solid #f5c0d0;color:#c04070}
+.q-tag .del{cursor:pointer;color:#ccc;font-size:14px;line-height:1}.q-tag .del:hover{color:var(--pink)}
+.saved-banner{background:#f0faf5;border:1px solid #90d0a8;border-radius:var(--rs);padding:.65rem 1rem;font-size:12px;color:#3a7a55;display:flex;align-items:center;gap:6px;margin-bottom:.9rem}
+.primary-btn{width:100%;padding:.85rem;border:none;border-radius:var(--r);color:white;font-family:'Noto Sans SC',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:.25rem;transition:opacity .15s}
+.primary-btn:hover{opacity:.88}.primary-btn:active{transform:scale(.98)}
+.btn-blue{background:linear-gradient(135deg,#4a90d9,#60b0e8)}
+.btn-pink{background:linear-gradient(135deg,#d4567a,#e8906a)}
+.small-hint{font-size:11px;color:var(--t3);text-align:center;margin-top:.5rem}
 
-/* ── TOPBAR ── */
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: clamp(.85rem, 3vw, 1.2rem) clamp(1rem, 4vw, 1.5rem) 0;
-  background: var(--bg);
-  flex-shrink: 0;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  border-bottom: 0.5px solid transparent;
-}
-.back-btn {
-  background: none; border: none;
-  color: var(--text2); cursor: pointer;
-  font-family: 'Noto Sans SC', sans-serif;
-  font-size: var(--fs-sm);
-  padding: 6px 0;
-  display: flex; align-items: center; gap: 3px;
-}
-.back-btn:hover { color: var(--text); }
-.topbar-title {
-  font-family: 'Noto Serif SC', serif;
-  font-size: var(--fs-md);
-  font-weight: 700;
-  color: var(--text);
-}
+/* TRUTH GAME */
+#s-truth .tbody{flex:1;overflow-y:auto;padding:.9rem clamp(.75rem,3vw,1.1rem)}
+.truth-cols{display:flex;flex-direction:column;gap:10px;max-width:600px;margin:0 auto}
+.t-col{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden}
+.t-col-hd{display:flex;align-items:center;gap:8px;padding:.65rem 1rem;border-bottom:1px solid var(--border)}
+.t-col-hd.mh{background:#f0f6ff}.t-col-hd.fh{background:#fff0f5}
+.t-col-name{font-size:13px;font-weight:500}
+.mc{color:#3a70b0}.fc{color:#c04070}
+.t-col-idx{font-size:11px;color:var(--t3);margin-left:auto}
+.t-col-body{padding:.85rem 1rem}
+.q-box{background:#fafafa;border-radius:var(--rs);padding:.9rem;border:1px solid var(--border);margin-bottom:.7rem;min-height:78px;display:flex;align-items:center;justify-content:center}
+.q-text{font-family:'Noto Serif SC',serif;font-size:15px;font-weight:600;line-height:1.7;color:var(--text);text-align:center}
+.q-ph{color:var(--t3);font-size:13px;font-weight:400;font-family:'Noto Sans SC',sans-serif}
+.nq-btn{width:100%;padding:.65rem;border:none;border-radius:var(--rs);font-family:'Noto Sans SC',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s}
+.nq-btn:hover{opacity:.88}.nq-btn:active{transform:scale(.97)}
+.btn-m2{background:linear-gradient(135deg,#4a90d9,#60b0e8);color:white}
+.btn-f2{background:linear-gradient(135deg,#d4567a,#e87a9e);color:white}
 
-/* ── SETUP (Truth) ── */
-#s-setup .topbar, #s-truth .topbar { border-bottom-color: var(--border); }
-.setup-body {
-  flex: 1;
-  padding: clamp(1rem, 4vw, 1.5rem) clamp(1rem, 4vw, 1.5rem) 2rem;
-  overflow-y: auto;
-  max-width: 680px;
-  width: 100%;
-  margin: 0 auto;
-}
-.setup-section { margin-bottom: 1.5rem; }
-.setup-label {
-  font-size: var(--fs-sm);
-  font-weight: 500;
-  color: var(--text2);
-  margin-bottom: 0.6rem;
-  display: flex; align-items: center; gap: 7px;
-}
-.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.dot-m { background: var(--blue); }
-.dot-f { background: var(--pink); }
-.add-row { display: flex; gap: 8px; margin-bottom: 8px; }
-.q-inp {
-  flex: 1; min-width: 0;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  font-size: var(--fs-sm);
-  padding: 0.55rem 0.85rem;
-  font-family: 'Noto Sans SC', sans-serif;
-  -webkit-user-select: text;
-  user-select: text;
-}
-.q-inp:focus { outline: none; border-color: var(--pink); }
-.add-btn {
-  background: var(--card);
-  border: 1.5px solid var(--pink);
-  border-radius: var(--radius-sm);
-  color: var(--pink);
-  font-size: var(--fs-xs);
-  padding: 0.55rem clamp(0.6rem, 2vw, 1rem);
-  cursor: pointer;
-  flex-shrink: 0;
-  font-family: 'Noto Sans SC', sans-serif;
-  white-space: nowrap;
-}
-.add-btn:hover { background: var(--pink-light); }
-.tag-list { display: flex; flex-wrap: wrap; gap: 6px; min-height: 28px; }
-.q-tag {
-  border-radius: 20px; padding: 4px 10px;
-  font-size: var(--fs-xs);
-  display: flex; align-items: center; gap: 5px;
-}
-.q-tag.male { background: var(--blue-light); border: 1px solid #c0d8f5; color: #3a70b0; }
-.q-tag.female { background: var(--pink-light); border: 1px solid #f5c0d0; color: #c04070; }
-.q-tag .del { cursor: pointer; color: #ccc; font-size: 0.9rem; line-height: 1; }
-.q-tag .del:hover { color: var(--pink); }
-.start-game-btn {
-  width: 100%; padding: clamp(.8rem, 2.5vw, 1rem);
-  border: none; border-radius: var(--radius);
-  background: linear-gradient(135deg, #d4567a, #e8906a);
-  color: white;
-  font-family: 'Noto Sans SC', sans-serif;
-  font-size: var(--fs-md); font-weight: 500;
-  letter-spacing: 0.08em; cursor: pointer;
-  margin-top: 0.5rem;
-  transition: opacity var(--transition);
-}
-.start-game-btn:hover { opacity: 0.9; }
-.start-game-btn:active { transform: scale(0.98); }
-.preset-hint { font-size: var(--fs-xs); color: var(--text3); text-align: center; margin-top: 0.6rem; }
+/* BOTTLE */
+#s-bottle .bbody{flex:1;overflow-y:auto;padding:.9rem clamp(.75rem,3vw,1.1rem)}
+.bottle-toprow{display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem;gap:8px}
+.bottle-toprow h3{font-family:'Noto Serif SC',serif;font-size:15px;font-weight:700}
+.bottle-toprow p{font-size:11px;color:var(--t3);margin-top:2px}
+.save-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:20px;border:none;background:var(--text);color:#fff;font-family:'Noto Sans SC',sans-serif;font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.save-btn:hover{opacity:.82}
+.btabs{display:flex;background:var(--bg2);border-radius:10px;padding:3px;margin-bottom:1rem}
+.btab{flex:1;padding:6px 0;border-radius:8px;font-size:13px;text-align:center;cursor:pointer;color:var(--t2);transition:all .18s}
+.btab.active{background:var(--card);color:var(--text);font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(64px,17vw,84px),1fr));gap:10px 6px}
+.bwrap{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;border-radius:10px;padding:8px 3px 6px;transition:background .12s;touch-action:none;-webkit-touch-callout:none}
+.bwrap:hover,.bwrap.touching{background:#f5f0f8}
+.bwrap.confirmed{background:#fef4f8}
+.blabel{font-size:clamp(10.5px,2.8vw,12.5px);color:#555;text-align:center;line-height:1.3;font-weight:500}
+.bwrap.confirmed .blabel{color:#c04878;font-weight:700}
+.bfooter{margin-top:.9rem;padding:.7rem .9rem;background:var(--card);border-radius:12px;border:.5px solid var(--border);display:flex;align-items:flex-start;gap:8px}
+.bfooter-dot{width:7px;height:7px;border-radius:50%;background:#e090b0;flex-shrink:0;margin-top:3px}
+.bfooter-txt{font-size:12px;color:var(--t2);line-height:1.5}
 
-/* ── TRUTH GAME ── */
-.truth-game {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-  max-width: 900px;
-  width: 100%;
-  margin: 0 auto;
-  align-self: stretch;
-}
-.player-col {
-  flex: 1; display: flex; flex-direction: column;
-  border-right: 1px solid var(--border);
-  min-width: 0;
-}
-.player-col:last-child { border-right: none; }
-.pcol-header {
-  padding: clamp(.6rem, 2vw, .85rem) clamp(.75rem, 3vw, 1rem);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 6px;
-  flex-shrink: 0;
-}
-.pcol-header .pname { font-size: var(--fs-sm); font-weight: 500; }
-.pcol-header .pidx { font-size: var(--fs-xs); color: var(--text3); margin-left: auto; }
-.male-header { background: #f0f6ff; }
-.female-header { background: #fff0f5; }
-.pcol-body {
-  flex: 1; padding: clamp(.75rem, 3vw, 1rem) clamp(.75rem, 3vw, 1rem);
-  display: flex; flex-direction: column;
-  overflow-y: auto;
-}
-.q-box {
-  flex: 1; background: var(--card);
-  border-radius: var(--radius); padding: clamp(.85rem, 3vw, 1.1rem);
-  border: 1px solid var(--border); margin-bottom: 0.75rem;
-  display: flex; align-items: center; justify-content: center;
-  min-height: clamp(100px, 20vw, 160px);
-}
-.q-text {
-  font-family: 'Noto Serif SC', serif;
-  font-size: clamp(0.82rem, 2.2vw, 0.98rem);
-  font-weight: 600; line-height: 1.7; color: var(--text); text-align: center;
-}
-.q-text.placeholder { color: var(--text3); font-size: var(--fs-sm); font-weight: 400; font-family: 'Noto Sans SC', sans-serif; }
-.next-q-btn {
-  padding: clamp(.6rem, 2vw, .75rem);
-  border: none; border-radius: var(--radius-sm);
-  font-family: 'Noto Sans SC', sans-serif;
-  font-size: var(--fs-sm); font-weight: 500;
-  cursor: pointer; width: 100%;
-  transition: opacity var(--transition);
-}
-.next-q-btn:hover { opacity: 0.88; }
-.next-q-btn:active { transform: scale(0.97); }
-.btn-male { background: linear-gradient(135deg, #4a90d9, #60b0e8); color: white; }
-.btn-female { background: linear-gradient(135deg, #d4567a, #e87a9e); color: white; }
-.qnum { font-size: var(--fs-xs); color: var(--text3); text-align: center; margin-top: 5px; }
-
-/* ── BOTTLE ── */
-#s-bottle { background: var(--bg); }
-.bottle-page {
-  flex: 1;
-  padding: clamp(1rem, 3vw, 1.5rem) clamp(.85rem, 3vw, 1.25rem) 2rem;
-  overflow-y: auto;
-  max-width: 960px;
-  width: 100%;
-  margin: 0 auto;
-}
-.bottle-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 1rem; gap: 10px;
-}
-.bottle-header-left h3 {
-  font-family: 'Noto Serif SC', serif;
-  font-size: var(--fs-lg); font-weight: 600; margin-bottom: 2px;
-}
-.bottle-header-left p { font-size: var(--fs-xs); color: var(--text3); }
-.save-btn {
-  display: flex; align-items: center; gap: 5px;
-  padding: clamp(6px, 1.5vw, 8px) clamp(12px, 2.5vw, 16px);
-  border-radius: 20px; border: none;
-  background: var(--text); color: #fff;
-  font-family: 'Noto Sans SC', sans-serif;
-  font-size: var(--fs-xs); cursor: pointer;
-  transition: opacity var(--transition);
-  white-space: nowrap; flex-shrink: 0;
-}
-.save-btn:hover { opacity: 0.82; }
-.btabs {
-  display: flex; gap: 0; margin-bottom: 1.1rem;
-  background: var(--bg2); border-radius: 10px; padding: 3px;
-}
-.btab {
-  flex: 1; padding: clamp(5px, 1.5vw, 7px) 0;
-  border-radius: 8px; font-size: var(--fs-sm);
-  text-align: center; cursor: pointer; color: var(--text2);
-  transition: all var(--transition);
-}
-.btab.active { background: var(--card); color: var(--text); font-weight: 500; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
-.bgrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(clamp(60px, 12vw, 88px), 1fr));
-  gap: clamp(6px, 1.5vw, 10px) clamp(4px, 1vw, 6px);
-}
-.bwrap {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 5px; cursor: crosshair; border-radius: 10px;
-  padding: clamp(4px, 1.5vw, 7px) clamp(2px, 1vw, 4px);
-  transition: background var(--transition);
-  touch-action: none;
-}
-.bwrap:hover, .bwrap.touching { background: #f5f0f8; }
-.bwrap.confirmed { background: #fef6fa; }
-.blabel {
-  font-size: clamp(9px, 1.8vw, 11px); color: var(--text2);
-  text-align: center; line-height: 1.35;
-  min-height: 24px; display: flex; align-items: center; justify-content: center;
-  transition: color var(--transition);
-}
-.bwrap.confirmed .blabel { color: #c04878; font-weight: 500; }
-.bfooter {
-  margin-top: 1rem; padding: .7rem 1rem;
-  background: var(--card); border-radius: 12px;
-  border: .5px solid var(--border);
-  display: flex; align-items: center; gap: 8px;
-}
-.bfooter-dot { width: 7px; height: 7px; border-radius: 50%; background: #e090b0; flex-shrink: 0; }
-.bfooter-text { font-size: var(--fs-xs); color: var(--text2); flex: 1; line-height: 1.45; }
-
-/* ── CHESS ── */
-#s-chess { background: var(--bg); }
-.chess-wrap { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.chess-scroll { flex: 1; overflow-y: auto; padding: clamp(.75rem, 2vw, 1rem); }
-.board {
-  display: grid; gap: 3px; margin: 0 auto;
-}
-.cell {
-  border-radius: 6px; padding: 3px; display: flex; align-items: center;
-  justify-content: center; text-align: center;
-  font-size: clamp(7px, 1.3vw, 10px); line-height: 1.25; color: #333;
-  min-height: clamp(36px, 7vw, 50px); position: relative; cursor: pointer;
-  transition: transform 0.1s;
-}
-.cell:active { transform: scale(0.93); }
-.cell.normal { background: #fff; border: 1px solid #eee; }
-.cell.start { background: linear-gradient(135deg,#4a90d9,#70b0e8); color: white; font-weight: 600; }
-.cell.end { background: linear-gradient(135deg,#e05070,#f08060); color: white; font-weight: 700; }
-.cell.special { background: #fff9e6; border: 1.5px solid #f0c060; }
-.cell.back { background: #ffeaea; border: 1.5px solid #f09090; }
-.cell.male-only { background: #e8f2ff; border: 1.5px solid #90b8e8; }
-.cell.female-only { background: #fff0f5; border: 1.5px solid #e890b0; }
-.cell.drink { background: #f0fff0; border: 1.5px solid #90d090; }
-.cell.rest { background: #f5f5f5; border: 1px solid #ddd; color: #aaa; }
-.cell.empty { background: transparent; border: none; pointer-events: none; }
-.cell.runway { background: #eef6ff; border: 1px dashed #aacce8; pointer-events: none; }
-.cell-num { position: absolute; bottom: 2px; left: 3px; font-size: 7px; color: #ccc; opacity: 0.6; }
-.pawn {
-  display: inline-flex; width: clamp(13px,2.5vw,18px); height: clamp(13px,2.5vw,18px);
-  border-radius: 50%; font-size: clamp(8px,1.5vw,11px); align-items: center;
-  justify-content: center; position: absolute; top: 2px; right: 2px; font-weight: 700;
-}
-.pawn-m { background: #4a90d9; color: white; }
-.pawn-f { background: #e05070; color: white; right: clamp(14px,2.8vw,20px); }
-.dice-area {
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  padding: clamp(.75rem, 2vw, 1rem);
-  background: var(--card); border-top: 1px solid var(--border); flex-shrink: 0;
-}
-.dice-row { display: flex; gap: clamp(8px, 2vw, 12px); flex-wrap: wrap; justify-content: center; }
-.dice-btn {
-  padding: clamp(7px,1.5vw,10px) clamp(1rem,3vw,1.5rem);
-  border: none; border-radius: var(--radius-sm);
-  font-family: 'Noto Sans SC', sans-serif;
-  font-size: var(--fs-sm); font-weight: 500; cursor: pointer;
-  transition: opacity var(--transition);
-}
-.dice-btn:hover { opacity: 0.88; }
-.dice-btn:active { transform: scale(0.96); }
-.dice-btn.m { background: linear-gradient(135deg,#4a90d9,#60b0e8); color: white; }
-.dice-btn.f { background: linear-gradient(135deg,#d4567a,#e87a9e); color: white; }
-.dice-result { font-size: var(--fs-sm); color: var(--text2); text-align: center; min-height: 20px; }
-
-/* ── TASK POPUP ── */
-.popup-overlay {
-  display: none;
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0.45);
-  align-items: flex-end; justify-content: center;
-  padding: 0 0 env(safe-area-inset-bottom, 0);
-}
-.popup-overlay.show { display: flex; }
-@media (min-width: 600px) {
-  .popup-overlay { align-items: center; }
-  .task-card { border-radius: var(--radius) !important; max-width: 400px !important; margin: 1rem; }
-}
-.task-card {
-  background: var(--card);
-  border-radius: var(--radius) var(--radius) 0 0;
-  padding: clamp(1.25rem, 4vw, 1.75rem) clamp(1.25rem, 4vw, 1.5rem);
-  width: 100%; max-width: 480px; text-align: center;
-}
-.task-label { font-size: var(--fs-xs); letter-spacing: 0.15em; color: var(--text3); margin-bottom: 0.75rem; }
-.task-content {
-  font-family: 'Noto Serif SC', serif;
-  font-size: var(--fs-lg); font-weight: 700;
-  line-height: 1.65; color: var(--text); margin-bottom: 1.25rem;
-}
-.task-close {
-  padding: clamp(0.6rem,2vw,.75rem) 2.5rem;
-  border: none; border-radius: var(--radius-sm);
-  background: linear-gradient(135deg,#d4567a,#e8906a);
-  color: white; font-family: 'Noto Sans SC', sans-serif;
-  font-size: var(--fs-sm); cursor: pointer; font-weight: 500;
-}
-
-/* ── Legend ── */
-.legend { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 clamp(.75rem,2vw,1rem) .6rem; }
-.leg-item { display: flex; align-items: center; gap: 4px; font-size: clamp(9px,1.6vw,11px); color: var(--text2); }
-.leg-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-
-/* ── Responsive tweaks ── */
-@media (max-width: 360px) {
-  .bgrid { grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); }
-}
-@media (min-width: 768px) {
-  .bgrid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
-  .truth-game { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
-}
-@media (min-width: 1024px) {
-  .bgrid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
-}
+/* CHESS */
+#s-chess .cwrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#chess-canvas-wrap{flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:flex-start;padding:.5rem;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y}
+#chess-scaler{transform-origin:top left;transition:transform .15s}
+#chess-canvas{display:block;cursor:pointer}
+.chess-bottom{background:var(--card);border-top:1px solid var(--border);padding:.55rem .9rem .65rem;flex-shrink:0}
+.legend{display:flex;flex-wrap:wrap;gap:3px 9px;margin-bottom:.45rem}
+.leg{display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--t2)}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.zoom-bar{display:flex;align-items:center;gap:8px;margin-bottom:.45rem}
+.zoom-lbl{font-size:10.5px;color:var(--t3);white-space:nowrap}
+.zoom-slider{flex:1;height:3px;accent-color:#9060d0;cursor:pointer}
+.zoom-val{font-size:10.5px;color:var(--t2);min-width:30px;text-align:right}
+.dice-panels{display:flex;gap:10px;margin-bottom:.35rem}
+.dp{flex:1;background:#fafafa;border:1px solid var(--border);border-radius:12px;padding:.45rem .8rem;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .12s;-webkit-tap-highlight-color:transparent}
+.dp:active{transform:scale(.97)}
+.dp.dm{border-color:#c0d8f5}.dp.df{border-color:#f5c0d8}
+.dp.dm:hover{background:#f0f6ff}.dp.df:hover{background:#fff0f6}
+.dp-dice{flex-shrink:0;width:42px;height:42px}
+.dp-info{flex:1;min-width:0}
+.dp-name{font-size:12px;font-weight:500;margin-bottom:1px}
+.dm .dp-name{color:#3a70b0}.df .dp-name{color:#c04070}
+.dp-sub{font-size:10px;color:var(--t3)}
+.dice-result{font-size:11.5px;color:var(--t2);text-align:center;min-height:15px}
+.cheat-row{display:flex;gap:6px;margin-top:4px}
+.cheat-btn{flex:1;padding:3px;border-radius:5px;font-size:10px;cursor:pointer;font-family:'Noto Sans SC',sans-serif}
+.cheat-btn.cm{border:1px dashed #90b8e0;background:#f0f6ff;color:#3060b0}
+.cheat-btn.cf{border:1px dashed #e080b0;background:#fff0f8;color:#b03070}
+@keyframes dShake{0%{transform:rotate(0)scale(1)translateY(0)}20%{transform:rotate(-20deg)scale(1.18)translateY(-4px)}40%{transform:rotate(16deg)scale(1.14)translateY(-6px)}60%{transform:rotate(-10deg)scale(1.08)translateY(-2px)}80%{transform:rotate(5deg)scale(1.03)translateY(-1px)}100%{transform:rotate(0)scale(1)translateY(0)}}
+@keyframes numIn{0%{transform:scale(.4);opacity:0}65%{transform:scale(1.25)}100%{transform:scale(1);opacity:1}}
+.shaking{animation:dShake .5s cubic-bezier(.36,.07,.19,.97)}
+.num-in{animation:numIn .28s ease forwards}
+/* popup */
+.popup-bg{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.45);align-items:flex-end;justify-content:center}
+.popup-bg.show{display:flex}
+@media(min-width:600px){.popup-bg{align-items:center}.task-card{border-radius:var(--r)!important;max-width:380px!important;margin:1.5rem}}
+.task-card{background:var(--card);border-radius:20px 20px 0 0;padding:1.5rem 1.4rem;width:100%;max-width:480px;text-align:center}
+.task-who{font-size:11px;letter-spacing:.15em;color:var(--t3);margin-bottom:.6rem}
+.tbadge{display:inline-block;font-size:11px;letter-spacing:.1em;padding:3px 12px;border-radius:20px;margin-bottom:.65rem}
+.tbs{background:#fffae6;color:#8a6000}.tbb{background:#ffe8e8;color:#a02020}
+.tbd{background:#e8fff4;color:#1a5830}.tbm{background:#ddeeff;color:#103870}
+.tbf{background:#ffe0f0;color:#801848}.tbr{background:#f0f0f0;color:#888}
+.tbe{background:linear-gradient(135deg,#ffecd2,#fcb69f);color:#8a3010}.tbi{background:#f0e8ff;color:#601890}
+.task-text{font-family:'Noto Serif SC',serif;font-size:clamp(14px,4vw,17px);font-weight:700;line-height:1.7;color:var(--text);margin-bottom:1.2rem}
+.task-close{padding:.65rem 2.5rem;border:none;border-radius:var(--rs);background:linear-gradient(135deg,#d4567a,#e8906a);color:white;font-family:'Noto Sans SC',sans-serif;font-size:13px;cursor:pointer;font-weight:500}
 </style>
 </head>
 <body>
 
-<!-- ══ HOME ══ -->
+<!-- HOME -->
 <div class="screen active" id="s-home">
-  <div id="s-home" style="flex:1;display:flex;align-items:center;justify-content:center;padding:clamp(1.5rem,5vw,4rem) clamp(1rem,5vw,2rem)">
-    <div class="home-inner">
-      <div class="home-badge">COUPLES ONLY</div>
-      <div class="home-title">亲密<span>游戏</span></div>
-      <div class="home-sub">专为你们设计的升温小游戏合集</div>
-      <div class="entry-list">
-        <div class="ecard c1" onclick="go('s-setup')">
-          <div class="eicon">💬</div>
-          <div class="einfo">
-            <div class="etitle">真心话</div>
-            <div class="edesc">三个阶段 · 男女各自答题<br>可以加自己想问的专属问题</div>
-          </div>
-          <div class="earrow">›</div>
-        </div>
-        <div class="ecard c2" onclick="go('s-bottle')">
-          <div class="eicon">🫙</div>
-          <div class="einfo">
-            <div class="etitle">性癖小瓶子</div>
-            <div class="edesc">根据喜欢程度填满瓶子<br>看看你们的重叠有多少</div>
-          </div>
-          <div class="earrow">›</div>
-        </div>
-        <div class="ecard c3" onclick="go('s-chess')">
-          <div class="eicon">✈️</div>
-          <div class="einfo">
-            <div class="etitle">情侣飞行棋</div>
-            <div class="edesc">双人掷骰子 · 落格做任务<br>先到终点赢</div>
-          </div>
-          <div class="earrow">›</div>
-        </div>
-      </div>
+<div class="home-wrap"><div class="home-inner">
+  <div class="home-badge">COUPLES ONLY</div>
+  <div class="home-title">亲密<span>游戏</span></div>
+  <div class="home-sub">专为你们设计的升温小游戏合集</div>
+  <div class="entry-list">
+    <div class="ecard c1" onclick="go('s-setup')">
+      <div class="eicon"><svg viewBox="0 0 24 24" fill="none" stroke="#d04070" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="einfo"><div class="etitle">真心话</div><div class="edesc">三个阶段 · 男女各自答题<br>可以加自己想问的专属问题</div></div>
+      <div class="earrow">›</div>
+    </div>
+    <div class="ecard c2" onclick="go('s-bottle')">
+      <div class="eicon"><svg viewBox="0 0 24 24" fill="none" stroke="#7040c0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v3.5L18 11v9a1 1 0 01-1 1H7a1 1 0 01-1-1v-9l3-4.5V3z"/><line x1="6" y1="11" x2="18" y2="11"/></svg></div>
+      <div class="einfo"><div class="etitle">性癖小瓶子</div><div class="edesc">根据喜欢程度填满瓶子<br>看看你们的重叠有多少</div></div>
+      <div class="earrow">›</div>
+    </div>
+    <div class="ecard c3" onclick="go('s-chess')">
+      <div class="eicon"><svg viewBox="0 0 24 24" fill="none" stroke="#c06020" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 3v18M16 3v18M2 9h20M2 15h20"/></svg></div>
+      <div class="einfo"><div class="etitle">情侣飞行棋</div><div class="edesc">双人掷骰子 · 落格做任务<br>先到终点赢</div></div>
+      <div class="earrow">›</div>
     </div>
   </div>
+</div></div>
 </div>
 
-<!-- ══ TRUTH SETUP ══ -->
+<!-- TRUTH SETUP -->
 <div class="screen" id="s-setup">
   <div class="topbar">
-    <button class="back-btn" onclick="go('s-home')">← 返回</button>
+    <button class="back-btn" onclick="go('s-home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</button>
     <span class="topbar-title">真心话 · 准备</span>
   </div>
-  <div class="setup-body">
-    <div class="setup-section">
-      <div class="setup-label"><span class="dot dot-m"></span>给男生加题目（选填）</div>
-      <div class="add-row">
-        <input class="q-inp" id="inp-m" placeholder="输入想问男生的问题…" onkeydown="if(event.key==='Enter')addQ('m')">
-        <button class="add-btn" onclick="addQ('m')">添加</button>
+  <div class="sbody">
+    <div class="setup-step active" id="step-m">
+      <div class="setup-card">
+        <div class="setup-who-row"><div class="who-avatar m">💙</div><div class="who-name m">男生的专属题目</div></div>
+        <div class="setup-hint">在这里添加你想问男生的问题。加完点「保存并交给对方」，题目会隐藏，再让女生添加她的题目。也可以不加，直接继续。</div>
+        <div class="add-row">
+          <input class="q-inp" id="inp-m" placeholder="输入想问男生的问题…" onkeydown="if(event.key==='Enter')addQ('m')">
+          <button class="add-btn" onclick="addQ('m')">添加</button>
+        </div>
+        <div class="tag-list" id="tags-m"></div>
+        <button class="primary-btn btn-blue" onclick="saveStepM()">保存并交给女生 →</button>
+        <div class="small-hint">不加也可以，直接点继续</div>
       </div>
-      <div class="tag-list" id="tags-m"></div>
     </div>
-    <div class="setup-section">
-      <div class="setup-label"><span class="dot dot-f"></span>给女生加题目（选填）</div>
-      <div class="add-row">
-        <input class="q-inp" id="inp-f" placeholder="输入想问女生的问题…" onkeydown="if(event.key==='Enter')addQ('f')">
-        <button class="add-btn" onclick="addQ('f')">添加</button>
+    <div class="setup-step" id="step-f">
+      <div class="setup-card">
+        <div class="setup-who-row"><div class="who-avatar f">🩷</div><div class="who-name f">女生的专属题目</div></div>
+        <div class="saved-banner"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>男生的题目已保存，内容已隐藏</div>
+        <div class="setup-hint">现在轮到女生添加她想问的问题。也可以不加，直接开始游戏。</div>
+        <div class="add-row">
+          <input class="q-inp" id="inp-f" placeholder="输入想问女生的问题…" onkeydown="if(event.key==='Enter')addQ('f')">
+          <button class="add-btn" onclick="addQ('f')">添加</button>
+        </div>
+        <div class="tag-list" id="tags-f"></div>
+        <button class="primary-btn btn-pink" onclick="startTruth()">开始游戏 →</button>
+        <div class="small-hint">不加也可以，直接用系统预设</div>
       </div>
-      <div class="tag-list" id="tags-f"></div>
     </div>
-    <button class="start-game-btn" onclick="startTruth()">开始游戏</button>
-    <div class="preset-hint">不加也可以，直接用预设题目开始</div>
   </div>
 </div>
 
-<!-- ══ TRUTH GAME ══ -->
+<!-- TRUTH GAME -->
 <div class="screen" id="s-truth">
   <div class="topbar">
-    <button class="back-btn" onclick="go('s-home')">← 返回</button>
+    <button class="back-btn" onclick="go('s-home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</button>
     <span class="topbar-title">真心话</span>
   </div>
-  <div class="truth-game">
-    <div class="player-col">
-      <div class="pcol-header male-header">
-        <span style="font-size:16px">💙</span>
-        <span class="pname" style="color:#3a70b0">男生</span>
-        <span class="pidx" id="m-idx">1/20</span>
+  <div class="tbody">
+    <div class="truth-cols">
+      <div class="t-col">
+        <div class="t-col-hd mh"><span style="font-size:15px">💙</span><span class="t-col-name mc">男生</span><span class="t-col-idx" id="m-idx">1/20</span></div>
+        <div class="t-col-body"><div class="q-box"><div class="q-text q-ph" id="m-q">点击下方按钮开始</div></div><button class="nq-btn btn-m2" onclick="nextQ('m')">下一题</button></div>
       </div>
-      <div class="pcol-body">
-        <div class="q-box"><div class="q-text placeholder" id="m-q">点击下方按钮开始</div></div>
-        <button class="next-q-btn btn-male" onclick="nextQ('m')">下一题</button>
-        <div class="qnum" id="m-qnum"></div>
-      </div>
-    </div>
-    <div class="player-col">
-      <div class="pcol-header female-header">
-        <span style="font-size:16px">🩷</span>
-        <span class="pname" style="color:#c04070">女生</span>
-        <span class="pidx" id="f-idx">1/20</span>
-      </div>
-      <div class="pcol-body">
-        <div class="q-box"><div class="q-text placeholder" id="f-q">点击下方按钮开始</div></div>
-        <button class="next-q-btn btn-female" onclick="nextQ('f')">下一题</button>
-        <div class="qnum" id="f-qnum"></div>
+      <div class="t-col">
+        <div class="t-col-hd fh"><span style="font-size:15px">🩷</span><span class="t-col-name fc">女生</span><span class="t-col-idx" id="f-idx">1/20</span></div>
+        <div class="t-col-body"><div class="q-box"><div class="q-text q-ph" id="f-q">点击下方按钮开始</div></div><button class="nq-btn btn-f2" onclick="nextQ('f')">下一题</button></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ BOTTLE ══ -->
+<!-- BOTTLE -->
 <div class="screen" id="s-bottle">
   <div class="topbar">
-    <button class="back-btn" onclick="go('s-home')">← 返回</button>
+    <button class="back-btn" onclick="go('s-home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</button>
     <span class="topbar-title" style="color:#7040c0">性癖小瓶子</span>
   </div>
-  <div class="bottle-page" id="bottle-capture">
-    <div class="bottle-header">
-      <div class="bottle-header-left">
-        <h3>性癖小瓶子</h3>
-        <p>移动鼠标/手指调液位 · 单击确认 · 再次单击清除</p>
-      </div>
-      <button class="save-btn" onclick="saveBottleImg()">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1v9M4 7l4 4 4-4M2 12v1a1 1 0 001 1h10a1 1 0 001-1v-1" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        保存图片
-      </button>
+  <div class="bbody" id="bottle-capture">
+    <div class="bottle-toprow">
+      <div><h3>性癖小瓶子</h3><p>上下滑动调液位 · 单击确认 · 再次单击清除</p></div>
+      <button class="save-btn" id="save-btn-el" onclick="saveBottleImg()"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1v9M4 7l4 4 4-4M2 12v1a1 1 0 001 1h10a1 1 0 001-1v-1" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>保存图片</button>
     </div>
     <div class="btabs">
       <div class="btab active" onclick="switchBTab(0,this)">行为偏好</div>
       <div class="btab" onclick="switchBTab(1,this)">场景地点</div>
     </div>
     <div class="bgrid" id="bgrid"></div>
-    <div class="bfooter"><div class="bfooter-dot"></div><span class="bfooter-text" id="bfooter">还没有确认任何偏好，移到瓶子上开始</span></div>
+    <div class="bfooter"><div class="bfooter-dot"></div><span class="bfooter-txt" id="bfooter">还没有确认任何偏好，上下滑动瓶子调整液位后单击确认</span></div>
   </div>
 </div>
 
-<!-- ══ CHESS ══ -->
+<!-- CHESS -->
 <div class="screen" id="s-chess">
   <div class="topbar">
-    <button class="back-btn" onclick="go('s-home')">← 返回</button>
+    <button class="back-btn" onclick="go('s-home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</button>
     <span class="topbar-title" style="color:#c06020">情侣飞行棋</span>
   </div>
-  <div class="chess-wrap">
-    <div class="legend">
-      <div class="leg-item"><div class="leg-dot" style="background:#fff9e6;border:1.5px solid #f0c060"></div>任务格</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#ffeaea;border:1.5px solid #f09090"></div>后退</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#e8f2ff;border:1.5px solid #90b8e8"></div>男生专属</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#fff0f5;border:1.5px solid #e890b0"></div>女生专属</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#f0fff0;border:1.5px solid #90d090"></div>喝酒</div>
+  <div class="cwrap">
+    <div id="chess-canvas-wrap">
+      <div id="chess-scaler"><canvas id="chess-canvas"></canvas></div>
     </div>
-    <div class="chess-scroll"><div id="chess-board"></div></div>
-    <div class="dice-area">
-      <div class="dice-row">
-        <button class="dice-btn m" onclick="rollDice('m')">💙 男生掷骰子</button>
-        <button class="dice-btn f" onclick="rollDice('f')">🩷 女生掷骰子</button>
+    <div class="chess-bottom">
+      <div class="legend">
+        <div class="leg"><div class="leg-dot" style="background:#fff9e0;border:1.5px solid #e8c000"></div>任务</div>
+        <div class="leg"><div class="leg-dot" style="background:#ffe8e8;border:1.5px solid #e88080"></div>后退</div>
+        <div class="leg"><div class="leg-dot" style="background:#ddeeff;border:1.5px solid #5090e0"></div>男专属</div>
+        <div class="leg"><div class="leg-dot" style="background:#ffe0f0;border:1.5px solid #e060a8"></div>女专属</div>
+        <div class="leg"><div class="leg-dot" style="background:#e8fff4;border:1.5px solid #50c878"></div>喝酒</div>
+        <div class="leg"><div class="leg-dot" style="background:#f0e8ff;border:1.5px solid #9060d0"></div>决赛圈</div>
       </div>
-      <div class="dice-result" id="dice-result">准备好了吗？掷骰子开始！</div>
+      <div class="zoom-bar">
+        <span class="zoom-lbl">缩放</span>
+        <input class="zoom-slider" type="range" min="60" max="200" value="100" step="5" id="zoom-slider" oninput="setZoom(this.value)">
+        <span class="zoom-val" id="zoom-val">100%</span>
+      </div>
+      <div class="dice-panels">
+        <div class="dp dm" onclick="rollDice('m')" id="panel-m">
+          <svg class="dp-dice" id="dice-m" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gm1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5ba8f5"/><stop offset="100%" stop-color="#1a60d0"/></linearGradient>
+              <linearGradient id="gm2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3a80d9"/><stop offset="100%" stop-color="#0e4aaa"/></linearGradient>
+              <linearGradient id="gm3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2560b8"/><stop offset="100%" stop-color="#0a3888"/></linearGradient>
+            </defs>
+            <polygon points="22,4 38,12 22,20 6,12" fill="url(#gm1)" stroke="rgba(255,255,255,.25)" stroke-width=".6"/>
+            <polygon points="38,12 38,32 22,40 22,20" fill="url(#gm2)" stroke="rgba(0,0,0,.15)" stroke-width=".6"/>
+            <polygon points="6,12 22,20 22,40 6,32" fill="url(#gm3)" stroke="rgba(0,0,0,.2)" stroke-width=".6"/>
+            <g id="dots-m"></g>
+          </svg>
+          <div class="dp-info"><div class="dp-name">💙 男生</div><div class="dp-sub" id="sub-m">点击掷骰子</div></div>
+        </div>
+        <div class="dp df" onclick="rollDice('f')" id="panel-f">
+          <svg class="dp-dice" id="dice-f" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gf1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f5a0c0"/><stop offset="100%" stop-color="#d03080"/></linearGradient>
+              <linearGradient id="gf2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#d85090"/><stop offset="100%" stop-color="#a01860"/></linearGradient>
+              <linearGradient id="gf3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b83878"/><stop offset="100%" stop-color="#880848"/></linearGradient>
+            </defs>
+            <polygon points="22,4 38,12 22,20 6,12" fill="url(#gf1)" stroke="rgba(255,255,255,.25)" stroke-width=".6"/>
+            <polygon points="38,12 38,32 22,40 22,20" fill="url(#gf2)" stroke="rgba(0,0,0,.15)" stroke-width=".6"/>
+            <polygon points="6,12 22,20 22,40 6,32" fill="url(#gf3)" stroke="rgba(0,0,0,.2)" stroke-width=".6"/>
+            <g id="dots-f"></g>
+          </svg>
+          <div class="dp-info"><div class="dp-name">🩷 女生</div><div class="dp-sub" id="sub-f">点击掷骰子</div></div>
+        </div>
+      </div>
+      <div class="dice-result" id="dice-result">准备好了吗？点击骰子开始！</div>
+      <div class="cheat-row">
+        <button class="cheat-btn cm" onclick="cheatPos('m')">🧪 男生→入口前</button>
+        <button class="cheat-btn cf" onclick="cheatPos('f')">🧪 女生→入口前</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ══ TASK POPUP ══ -->
-<div class="popup-overlay" id="task-popup">
+<!-- POPUP -->
+<div class="popup-bg" id="task-popup">
   <div class="task-card">
-    <div class="task-label" id="task-who"></div>
-    <div class="task-content" id="task-text"></div>
+    <div class="task-who" id="task-who"></div>
+    <div class="tbadge" id="task-badge"></div>
+    <div class="task-text" id="task-text"></div>
     <button class="task-close" onclick="closeTask()">知道了，完成！</button>
   </div>
 </div>
 
 <script>
-/* ══ DATA ══ */
-const QM = ["上一次哭是因为什么？","用三个形容词形容一下你自己","最近一年最开心的一件事是什么？","如果墓碑上只能刻一句话，你会刻什么？","做过最丢人的一件事是什么？","你相信男女之间有纯友谊吗？为什么？","你觉得自己最大的缺点是什么？","你有没有什么别人不知道的小习惯？","你最后悔没做的一件事是什么？","如果可以改变人生中的一个决定，你会改变哪个？","你有没有特别羡慕过某个人？羡慕他什么？","你觉得你和大多数人最不一样的地方是什么？","你有没有一段时间特别讨厌自己？是因为什么？","你人生中最孤独的一段时光是什么时候？","你最害怕失去的东西是什么？","对方让你觉得心动的三个瞬间是什么？","喜欢对方的三个理由，认真说","说出三个对方的缺点，真实的","精神出轨和肉体出轨，你更能接受哪一个？","在床上你喜欢自己主动还是对方主动？","最喜欢哪个体位？","你有没有什么特别敏感的部位？","更喜欢有毛还是白虎？","最喜欢射在哪里？"];
-const QF = ["用三个形容词形容一下你自己","上一次哭是因为什么？","你觉得自己最大的缺点是什么？","做过最丢人的一件事是什么？","你有没有什么别人不知道的小习惯？","你最后悔没做的一件事是什么？","你相信男女之间有纯友谊吗？为什么？","如果墓碑上只能刻一句话，你会刻什么？","你最害怕失去的东西是什么？","如果今晚是你最后一晚，你会做什么？","你有没有一段时间特别讨厌自己？是因为什么？","你人生中最孤独的一段时光是什么时候？","你有没有从来没跟任何人说过的秘密？","对方让你觉得心动的三个瞬间是什么？","喜欢对方的三个理由","说出三个对方的缺点，真实的","精神出轨和肉体出轨，你更能接受哪一个？","在床上你喜欢自己主动还是对方主动？","最喜欢哪个体位？","你有没有什么特别敏感的部位？","粗、长、硬，给你排个顺序","最喜欢被射在哪里？"];
+/* DATA */
+const QM=["上一次哭是因为什么？","用三个形容词形容一下你自己","最近一年最开心的一件事是什么？","如果墓碑上只能刻一句话，你会刻什么？","做过最丢人的一件事是什么？","你相信男女之间有纯友谊吗？为什么？","你觉得自己最大的缺点是什么？","你有没有什么别人不知道的小习惯？","你最后悔没做的一件事是什么？","你有没有特别羡慕过某个人？羡慕他什么？","你人生中最孤独的一段时光是什么时候？","你最害怕失去的东西是什么？","对方让你觉得心动的三个瞬间是什么？","喜欢对方的三个理由，认真说","说出三个对方的缺点，真实的","精神出轨和肉体出轨，你更能接受哪一个？","什么时候你最想对方？","你觉得我们会谈多久？","在床上你喜欢自己主动还是对方主动？","最喜欢哪个体位？","你有没有什么特别敏感的部位？","更喜欢有毛还是白虎？","最喜欢射在哪里？"];
+const QF=["用三个形容词形容一下你自己","上一次哭是因为什么？","你觉得自己最大的缺点是什么？","做过最丢人的一件事是什么？","你有没有什么别人不知道的小习惯？","你最后悔没做的一件事是什么？","你相信男女之间有纯友谊吗？为什么？","如果墓碑上只能刻一句话，你会刻什么？","你最害怕失去的东西是什么？","如果今晚是你最后一晚，你会做什么？","你有没有一段时间特别讨厌自己？是因为什么？","你人生中最孤独的一段时光是什么时候？","你有没有从来没跟任何人说过的秘密？","对方让你觉得心动的三个瞬间是什么？","喜欢对方的三个理由","说出三个对方的缺点，真实的","精神出轨和肉体出轨，你更能接受哪一个？","在床上你喜欢自己主动还是对方主动？","最喜欢哪个体位？","你有没有什么特别敏感的部位？","粗、长、硬，给你排个顺序","最喜欢被射在哪里？"];
 
-const BOTTLE_CATS = [
-  {name:'行为偏好',items:['舌吻','被舔耳朵','被舔乳头','指交/帮撸','被口','帮对方口','种草莓','S属性','M属性','女上位','传教士','后入','肛交','乳交','无套','内射','口爆','潮吹','性窒息','打屁股','下流话','制服','3P/群P','公共场合','道具','录像/拍照','角色扮演','浴室/客厅']},
+const BCATS=[
+  {name:'行为偏好',items:['舌吻','被舔耳朵','被舔乳头','指交/帮撸','被口','帮对方口','种草莓','S属性','M属性','女上位','传教士','后入','肛交','乳交','无套','内射','口爆','潮吹','性窒息','打屁股','下流话','制服','3P/群P','公共场合','道具','录像/拍照','角色扮演']},
   {name:'场景地点',items:['浴室','厨房','落地窗前','卧室','客厅','瑜伽垫','车里','后院','户外','私人影院','天台','酒店','舞蹈室','餐桌','帐篷','摄影棚','沙发','游轮','沙滩','办公室','草丛','教室','摩天轮','厕所','椅子','浴缸','游泳池','秋千','树林','楼道','野外','体育馆','网吧','图书馆','画室']}
 ];
 
-const CHESS_CELLS = [
-  {t:'start',l:'起点\n出发'},{t:'special',l:'掷骰子'},{t:'rest',l:'下一轮\n休息'},{t:'drink',l:'喝半杯'},
-  {t:'special',l:'口交至对方\n流水或坚挺10秒'},{t:'special',l:'舔对方\n耳根10秒'},{t:'special',l:'用嘴喂对方\n喝一口酒'},{t:'drink',l:'喝半杯'},
-  {t:'special',l:'为对方\n脱一件衣物'},{t:'special',l:'对方坐在脸上\n吸吮30秒'},
-  {t:'special',l:'为对方\n脱一件衣物'},{t:'special',l:'手伸进对方内裤\n随意发挥30秒'},{t:'special',l:'吮吸对方脖子\n种一颗草莓'},
-  {t:'back',l:'后退3格\n并脱一件'},{t:'special',l:'为对方\n撸管或抠逼1分钟'},{t:'drink',l:'喝半杯'},
-  {t:'male-only',l:'男生\n专属格'},{t:'special',l:'后入抽插\n对方1分钟'},{t:'special',l:'从背后抱住\n随意抚摸1分钟'},
-  {t:'special',l:'为对方\n口交3分钟'},{t:'special',l:'让对方喝酒\n每杯转账5.2元'},{t:'special',l:'舔对方\n乳头1分钟'},
-  {t:'end',l:'🏆终点\n先到者赢'},
-  {t:'special',l:'为对方\n口交3分钟'},{t:'special',l:'自己喝酒\n每杯对方转账13.14'},{t:'special',l:'选喜欢姿势\n让对方插10下'},
-  {t:'special',l:'观音坐莲\n自己动10下'},{t:'special',l:'喂对方喝\n一口自己口水'},{t:'female-only',l:'女生\n专属格'},
-  {t:'drink',l:'喝半杯'},{t:'rest',l:'下一轮\n休息'},{t:'special',l:'与对方\n舌吻30秒'},
-  {t:'special',l:'舔大腿内侧10秒\n笑场罚酒'},{t:'rest',l:'下一轮\n休息'},{t:'special',l:'从耳根舔\n到锁骨'},{t:'drink',l:'喝半杯'},
-  {t:'special',l:'手伸进对方内裤\n随意发挥30秒'},{t:'special',l:'自己脱\n一件衣物'},{t:'special',l:'打对方\n屁股3下'},
-  {t:'special',l:'为对方\n脱一件衣物'},{t:'back',l:'后退6格\n并脱一件'},{t:'drink',l:'喝半杯'},{t:'rest',l:'下一轮\n休息'},{t:'drink',l:'喝半杯'},
-  {t:'special',l:'露出私处\n允许对方拍照一张'},{t:'special',l:'指定一个地方\n让对方吸草莓'},{t:'special',l:'手伸进对方裤子\n随意发挥30秒'},
-  {t:'special',l:'男生停留此格\n女生咬乳头10秒'},{t:'back',l:'退回起点'},{t:'back',l:'后退3格\n并脱一件'},{t:'drink',l:'喝一杯'}
-];
-
-/* ── Navigation ── */
-function go(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+/* ── NAV ── */
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id === 's-chess') buildBoard();
-  if (id === 's-bottle') renderBottle();
-  window.scrollTo(0, 0);
+  if(id==='s-chess'){initChess();}
+  if(id==='s-bottle')renderBottle();
+  if(id==='s-setup'){document.getElementById('step-m').classList.add('active');document.getElementById('step-f').classList.remove('active');}
 }
 
-/* ── Truth ── */
-let customM = [], customF = [], mQueue = [], fQueue = [], mIdx = 0, fIdx = 0;
+/* ── TRUTH ── */
+let customM=[],customF=[],mQueue=[],fQueue=[],mIdx=0,fIdx=0;
+function addQ(g){const inp=document.getElementById('inp-'+g);const v=inp.value.trim();if(!v)return;(g==='m'?customM:customF).push(v);inp.value='';renderTags(g);}
+function renderTags(g){const arr=g==='m'?customM:customF;document.getElementById('tags-'+g).innerHTML=arr.map((q,i)=>`<div class="q-tag ${g==='m'?'male':'female'}">${q}<span class="del" onclick="delQ('${g}',${i})">×</span></div>`).join('');}
+function delQ(g,i){(g==='m'?customM:customF).splice(i,1);renderTags(g);}
+function saveStepM(){document.getElementById('step-m').classList.remove('active');document.getElementById('step-f').classList.add('active');}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function startTruth(){mQueue=shuffle([...QM,...customM]);fQueue=shuffle([...QF,...customF]);mIdx=0;fIdx=0;renderQ('m');renderQ('f');go('s-truth');}
+function renderQ(g){const q=g==='m'?mQueue[mIdx]:fQueue[fIdx];const idx=g==='m'?mIdx:fIdx;const tot=g==='m'?mQueue.length:fQueue.length;const el=document.getElementById(g+'-q');el.textContent=q||'题目已全部完成 🎉';el.className='q-text'+(q?'':' q-ph');document.getElementById(g==='m'?'m-idx':'f-idx').textContent=`${idx+1}/${tot}`;}
+function nextQ(g){if(g==='m')mIdx=(mIdx+1)%mQueue.length;else fIdx=(fIdx+1)%fQueue.length;renderQ(g);}
 
-function addQ(g) {
-  const inp = document.getElementById('inp-' + g);
-  const v = inp.value.trim(); if (!v) return;
-  (g === 'm' ? customM : customF).push(v);
-  inp.value = '';
-  renderTags(g);
+/* ── BOTTLE ── */
+let bTab=0,bLevels=[{},{}];
+function switchBTab(i,el){bTab=i;document.querySelectorAll('.btab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderBottle();}
+function bSVG(lv,ti){
+  const W=44,H=60,nX=W*.28,nW=W*.44,nH=H*.12,bX=W*.08,bW=W*.84,bTop=H*.22,bH=H*.70,rx=W*.18;
+  const fH=Math.round(bH*lv/100),fY=bTop+bH-fH;
+  const uid='u'+Math.random().toString(36).slice(2,7);
+  const c=ti===0?{f:'#f0a0c0',s:'#d4537e',e:'#fdf5f8'}:{f:'#90c0f0',s:'#4a90d9',e:'#f2f7fd'};
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;flex-shrink:0"><defs><clipPath id="${uid}"><rect x="${bX}" y="${bTop}" width="${bW}" height="${bH}" rx="${rx}"/></clipPath></defs><rect x="${nX}" y="2" width="${nW}" height="${nH+2}" rx="${W*.07}" fill="${c.e}" stroke="${c.s}" stroke-width="1.1"/><rect x="${bX}" y="${bTop}" width="${bW}" height="${bH}" rx="${rx}" fill="${c.e}" stroke="${c.s}" stroke-width="1.2"/>${fH>0?`<rect x="${bX}" y="${fY}" width="${bW}" height="${fH}" fill="${c.f}" clip-path="url(#${uid})"/><rect x="${bX+bW*.14}" y="${fY+1}" width="${bW*.07}" height="${Math.min(fH-2,bH)}" fill="rgba(255,255,255,.42)" clip-path="url(#${uid})"/>`:''}<rect x="${bX}" y="${bTop}" width="${bW}" height="${bH}" rx="${rx}" fill="none" stroke="${c.s}" stroke-width="1.2"/>${lv>8?`<text x="${W/2}" y="${fY>bTop+13?fY-2:bTop+bH-3}" text-anchor="middle" font-size="8" fill="${c.s}" font-family="sans-serif" font-weight="600">${lv}%</text>`:''}</svg>`;
 }
-function renderTags(g) {
-  const arr = g === 'm' ? customM : customF;
-  document.getElementById('tags-' + g).innerHTML = arr.map((q, i) =>
-    `<div class="q-tag ${g === 'm' ? 'male' : 'female'}">${q}<span class="del" onclick="delQ('${g}',${i})">×</span></div>`
-  ).join('');
-}
-function delQ(g, i) { (g === 'm' ? customM : customF).splice(i, 1); renderTags(g); }
-function shuffle(a) { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[b[i], b[j]] = [b[j], b[i]]; } return b; }
-function startTruth() {
-  mQueue = shuffle([...QM, ...customM]);
-  fQueue = shuffle([...QF, ...customF]);
-  mIdx = 0; fIdx = 0;
-  renderQ('m'); renderQ('f');
-  go('s-truth');
-}
-function renderQ(g) {
-  const queue = g === 'm' ? mQueue : fQueue;
-  const idx = g === 'm' ? mIdx : fIdx;
-  const el = document.getElementById(g + '-q');
-  el.textContent = queue[idx] || '题目已全部完成 🎉';
-  el.className = 'q-text';
-  document.getElementById(g === 'm' ? 'm-idx' : 'f-idx').textContent = `${idx + 1}/${queue.length}`;
-}
-function nextQ(g) {
-  if (g === 'm') mIdx = (mIdx + 1) % mQueue.length;
-  else fIdx = (fIdx + 1) % fQueue.length;
-  renderQ(g);
-}
-
-/* ── Bottle ── */
-let bTab = 0, bLevels = [{}, {}], bHoverName = null, bHoverLevel = 50;
-
-function switchBTab(i, el) {
-  bTab = i;
-  document.querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  renderBottle();
-}
-
-function bottleSVG(lv, tabIdx) {
-  const W = 46, H = 64;
-  const neckX = W * .30, neckW = W * .40, neckH = H * .13;
-  const bX = W * .09, bW = W * .82, bTop = H * .23, bH = H * .70, rx = W * .18;
-  const fillH = Math.round(bH * lv / 100);
-  const fillY = bTop + bH - fillH;
-  const id = `b${tabIdx}${W}`;
-  const c = tabIdx === 0
-    ? { fill: '#f0a0c0', stroke: '#d4537e', empty: '#fdf5f8' }
-    : { fill: '#90c0f0', stroke: '#4a90d9', empty: '#f2f7fd' };
-  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    <defs><clipPath id="cp${id}"><rect x="${bX}" y="${bTop}" width="${bW}" height="${bH}" rx="${rx}"/></clipPath></defs>
-    <rect x="${neckX}" y="2" width="${neckW}" height="${neckH + 2}" rx="${W * .07}" fill="${c.empty}" stroke="${c.stroke}" stroke-width="1.1"/>
-    <rect x="${bX}" y="${bTop}" width="${bW}" height="${bH}" rx="${rx}" fill="${c.empty}" stroke="${c.stroke}" stroke-width="1.2"/>
-    ${fillH > 0 ? `<rect x="${bX}" y="${fillY}" width="${bW}" height="${fillH}" fill="${c.fill}" clip-path="url(#cp${id})"/>
-    <rect x="${bX + bW * .15}" y="${fillY + 1}" width="${bW * .07}" height="${Math.min(fillH - 2, bH)}" fill="rgba(255,255,255,.45)" clip-path="url(#cp${id})"/>` : ''}
-    <rect x="${bX}" y="${bTop}" width="${bW}" height="${bH}" rx="${rx}" fill="none" stroke="${c.stroke}" stroke-width="1.2"/>
-    ${lv > 5 ? `<text x="${W / 2}" y="${fillY > bTop + 14 ? fillY - 2 : bTop + bH - 3}" text-anchor="middle" font-size="8" fill="${c.stroke}" font-family="sans-serif">${lv}%</text>` : ''}
-  </svg>`;
-}
-
-function renderBottle() {
-  const items = BOTTLE_CATS[bTab].items;
-  const grid = document.getElementById('bgrid');
-  grid.innerHTML = items.map(name => {
-    const lv = bLevels[bTab][name] || 0;
-    const confirmed = lv > 0;
-    return `<div class="bwrap${confirmed ? ' confirmed' : ''}" data-name="${name}"
-      onmouseenter="bEnter('${name}')"
-      onmouseleave="bLeave('${name}')"
-      onmousemove="bMove(event,'${name}')"
-      onclick="bClick('${name}')"
-      ontouchstart="bTouchStart(event,'${name}')"
-      ontouchmove="bTouchMove(event,'${name}')"
-      ontouchend="bTouchEnd(event,'${name}')">
-      ${bottleSVG(lv, bTab)}
-      <div class="blabel">${name}</div>
-    </div>`;
+function renderBottle(){
+  document.getElementById('bgrid').innerHTML=BCATS[bTab].items.map(n=>{
+    const lv=bLevels[bTab][n]||0,conf=lv>0;
+    return `<div class="bwrap${conf?' confirmed':''}" data-n="${n}" ontouchstart="bTS(event,'${n}')" ontouchmove="bTM(event,'${n}')" ontouchend="bTE(event,'${n}')" onmouseenter="bME('${n}')" onmouseleave="bML('${n}')" onmousemove="bMM(event,'${n}')" onclick="bCK('${n}')">${bSVG(lv,bTab)}<div class="blabel">${n}</div></div>`;
   }).join('');
-  updateBFooter();
+  updateBF();
+}
+function bLv(cy,wrap){const s=wrap.querySelector('svg');if(!s)return 50;const r=s.getBoundingClientRect(),top=r.top+r.height*.22,bot=r.top+r.height*.92;return Math.max(0,Math.min(100,Math.round(100-(cy-top)/(bot-top)*100)));}
+function bUpd(n,lv){const w=document.querySelector(`.bwrap[data-n="${n}"]`);if(!w)return;const o=w.querySelector('svg');if(o)o.remove();w.insertAdjacentHTML('afterbegin',bSVG(lv,bTab));}
+let bHN=null,bHL=50,bTA=false,bTN=null,bTL=50;
+function bME(n){bHN=n;}
+function bML(n){bHN=null;bUpd(n,bLevels[bTab][n]||0);}
+function bMM(e,n){const lv=bLv(e.clientY,e.currentTarget);bHL=lv;bUpd(n,lv);}
+function bCK(n){if(bLevels[bTab][n]>0){delete bLevels[bTab][n];renderBottle();return;}bLevels[bTab][n]=bTA?bTL:(bHN===n?bHL:50);renderBottle();}
+function bTS(e,n){e.preventDefault();e.stopPropagation();bTA=true;bTN=n;e.currentTarget.classList.add('touching');bTL=bLv(e.touches[0].clientY,e.currentTarget);bUpd(n,bTL);}
+function bTM(e,n){if(!bTA||bTN!==n)return;e.preventDefault();e.stopPropagation();const w=document.querySelector(`.bwrap[data-n="${n}"]`);if(!w)return;bTL=bLv(e.touches[0].clientY,w);bUpd(n,bTL);}
+function bTE(e,n){if(!bTA||bTN!==n)return;e.preventDefault();e.stopPropagation();bTA=false;const w=document.querySelector(`.bwrap[data-n="${n}"]`);if(w)w.classList.remove('touching');bLevels[bTab][n]=bTL;renderBottle();}
+function updateBF(){let tot=0,fil=0;const tops=[];[0,1].forEach(ti=>BCATS[ti].items.forEach(n=>{tot++;const v=bLevels[ti][n];if(v>0){fil++;if(v>=70)tops.push(n);}}));document.getElementById('bfooter').textContent=fil===0?'还没有确认任何偏好，上下滑动瓶子调整液位后单击确认':`已确认 ${fil}/${tot} 项${tops.length>0?' · 非常喜欢：'+tops.slice(0,5).join(' · ')+(tops.length>5?'…':''):''}`;}
+function saveBottleImg(){const btn=document.getElementById('save-btn-el');const orig=btn.innerHTML;btn.textContent='生成中…';html2canvas(document.getElementById('bottle-capture'),{scale:2,backgroundColor:'#faf8f5',useCORS:true}).then(c=>{const a=document.createElement('a');a.download='我的性癖小瓶子.png';a.href=c.toDataURL('image/png');a.click();btn.innerHTML=orig;});}
+
+/* ════════════════════════════════════════
+   CHESS - Canvas v6
+   ════════════════════════════════════════ */
+const CHESS_COLS=13,CHESS_ROWS=9,INNER_ROW=4;
+const OPATH=[];
+for(let c=0;c<CHESS_COLS;c++) OPATH.push([0,c]);
+for(let r=1;r<=7;r++) OPATH.push([r,CHESS_COLS-1]);
+for(let c=CHESS_COLS-2;c>=0;c--) OPATH.push([CHESS_ROWS-1,c]);
+for(let r=7;r>=1;r--) OPATH.push([r,0]);
+
+const OUTER=[
+  {t:'start',l:'起点\n出发'},{t:'special',l:'掷骰子\n再走一次'},{t:'drink',l:'喝半杯'},
+  {t:'special',l:'口交至对方\n流水或\n坚挺10秒'},{t:'special',l:'舔对方\n耳根10秒'},
+  {t:'special',l:'用嘴喂对方\n喝一口酒'},{t:'drink',l:'喝半杯'},
+  {t:'special',l:'为对方\n脱一件衣物'},{t:'special',l:'对方坐脸上\n吸吮30秒'},
+  {t:'special',l:'为对方\n脱一件衣物'},{t:'special',l:'手伸进对方\n内裤随意\n发挥30秒'},
+  {t:'special',l:'吮吸对方\n脖子种\n草莓一颗'},{t:'drink',l:'喝半杯'},
+  {t:'back',l:'后退3格\n并脱一件'},{t:'special',l:'为对方\n撸管或抠\n逼1分钟'},
+  {t:'drink',l:'喝半杯'},{t:'special',l:'吮吸对方\n脖子种草莓'},
+  {t:'back',l:'后退3格\n并脱一件'},{t:'f-entry',l:'女生停留\n此格进入\n决赛圈'},
+  {t:'special',l:'喂对方\n喝口水'},{t:'drink',l:'喝半杯'},{t:'rest',l:'下一轮\n休息'},
+  {t:'drink',l:'喝半杯'},{t:'special',l:'露出私处\n允许对方\n拍照一张'},
+  {t:'special',l:'指定地方\n让对方\n吸草莓'},{t:'special',l:'手伸进对方\n裤子里\n发挥30秒'},
+  {t:'special',l:'男生停此格\n女生咬乳头\n10秒'},{t:'back',l:'退回起点'},
+  {t:'back',l:'后退3格\n并脱一件'},{t:'drink',l:'喝一杯'},
+  {t:'special',l:'与对方\n舌吻30秒'},{t:'drink',l:'喝半杯'},
+  {t:'special',l:'手伸进对方\n内裤随意\n发挥30秒'},{t:'special',l:'自己脱\n一件衣物'},
+  {t:'special',l:'打对方\n屁股3下'},{t:'m-entry',l:'男生停留\n此格进入\n决赛圈'},
+  {t:'drink',l:'喝半杯'},{t:'special',l:'与对方\n舌吻30秒'},{t:'back',l:'退回起点'},
+];
+const M_ENTRY_IDX=OUTER.findIndex(c=>c.t==='m-entry');
+const F_ENTRY_IDX=OUTER.findIndex(c=>c.t==='f-entry');
+
+const INNER=[
+  {t:'m-entry',l:'男生停留\n此格进入\n决赛圈'},
+  {t:'inner',l:'后入抽插\n对方1分钟'},{t:'inner',l:'从背后抱住\n随意抚摸\n1分钟'},
+  {t:'inner',l:'为对方\n口交3分钟'},{t:'inner',l:'让对方喝酒\n每杯转账\n¥5.2'},
+  {t:'inner',l:'舔对方\n乳头1分钟'},{t:'end',l:'🏆\n终点\n先到赢'},
+  {t:'inner',l:'为对方\n口交3分钟'},{t:'inner',l:'自己喝酒\n每杯对方\n转¥13.14'},
+  {t:'inner',l:'选喜欢姿势\n让对方插\n10下'},{t:'inner',l:'观音坐莲\n自己动\n至少10下'},
+  {t:'inner',l:'喂对方喝\n一口自己\n的口水'},{t:'f-entry',l:'女生停留\n此格进入\n决赛圈'},
+];
+const INNER_END=6,M_INNER_START=0,F_INNER_START=12;
+
+const CP={m:{outerPos:0,innerPos:-1,atEntry:false,inInner:false},f:{outerPos:0,innerPos:-1,atEntry:false,inInner:false}};
+
+const chessCanvas=document.getElementById('chess-canvas');
+const cctx=chessCanvas.getContext('2d');
+let CW,CH,cW,cH,chessInited=false;
+const CG=3,CPD=2.5;
+
+const CST={
+  start:{bg:'#2a6fd9',bd:'none',fg:'#fff'},end:{bg:'#e03060',bd:'none',fg:'#fff'},
+  special:{bg:'#fff9e0',bd:'#e0b800',fg:'#5a4000'},back:{bg:'#ffe8e8',bd:'#e88080',fg:'#a02020'},
+  drink:{bg:'#e8fff4',bd:'#50c878',fg:'#1a5830'},rest:{bg:'#f2f2f2',bd:'#ccc',fg:'#888'},
+  'f-entry':{bg:'#ffd0ec',bd:'#d060a0',fg:'#600838'},'m-entry':{bg:'#c8dcff',bd:'#4070d0',fg:'#082870'},
+  inner:{bg:'#f0e8ff',bd:'#9060d0',fg:'#400880'},
+};
+
+function initChess(){
+  chessInited=true;
+  document.getElementById('zoom-slider').value=100;
+  document.getElementById('zoom-val').textContent='100%';
+  document.getElementById('chess-scaler').style.transform='scale(1)';
+  chessInitSize();
+  drawChessBoard();
+  renderDots('m',1);renderDots('f',1);
 }
 
-function bGetLevel(e, wrap) {
-  const svg = wrap.querySelector('svg');
-  if (!svg) return 50;
-  const r = svg.getBoundingClientRect();
-  const bTop = r.top + r.height * .23, bBot = r.top + r.height * .93;
-  const y = Math.max(bTop, Math.min(bBot, e.clientY));
-  return Math.round(100 - (y - bTop) / (bBot - bTop) * 100);
+function chessInitSize(){
+  const dpr=window.devicePixelRatio||1;
+  const availW=window.innerWidth-10;
+  const availH=window.innerHeight*.60;
+  const byW=Math.floor((availW-CG*(CHESS_COLS-1))/CHESS_COLS);
+  const byH=Math.floor((availH-CG*(CHESS_ROWS-1))/CHESS_ROWS);
+  cW=Math.min(byW,Math.max(byH,26));
+  cH=Math.floor(cW*1.06);
+  CW=cW*CHESS_COLS+CG*(CHESS_COLS-1);
+  CH=cH*CHESS_ROWS+CG*(CHESS_ROWS-1);
+  chessCanvas.width=Math.round(CW*dpr);
+  chessCanvas.height=Math.round(CH*dpr);
+  chessCanvas.style.width=CW+'px';
+  chessCanvas.style.height=CH+'px';
+  cctx.setTransform(1,0,0,1,0,0);
+  cctx.scale(dpr,dpr);
 }
 
-function bUpdateSVG(name, lv) {
-  const wrap = document.querySelector(`.bwrap[data-name="${name}"]`);
-  if (!wrap) return;
-  const old = wrap.querySelector('svg');
-  if (old) old.remove();
-  wrap.insertAdjacentHTML('afterbegin', bottleSVG(lv, bTab));
+function oR(i){if(i<0||i>=OPATH.length)return null;const[r,c]=OPATH[i];return{x:c*(cW+CG),y:r*(cH+CG),w:cW,h:cH};}
+function iR(i){if(i<0||i>=INNER.length)return null;return{x:i*(cW+CG),y:INNER_ROW*(cH+CG),w:cW,h:cH};}
+
+function crrect(x,y,w,h,r,fill,stroke,lw=1.4){
+  cctx.beginPath();
+  cctx.moveTo(x+r,y);cctx.lineTo(x+w-r,y);cctx.arcTo(x+w,y,x+w,y+r,r);
+  cctx.lineTo(x+w,y+h-r);cctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  cctx.lineTo(x+r,y+h);cctx.arcTo(x,y+h,x,y+h-r,r);
+  cctx.lineTo(x,y+r);cctx.arcTo(x,y,x+r,y,r);
+  cctx.closePath();
+  cctx.fillStyle=fill;cctx.fill();
+  if(stroke!=='none'){cctx.strokeStyle=stroke;cctx.lineWidth=lw;cctx.stroke();}
 }
 
-function bEnter(name) { bHoverName = name; }
-function bLeave(name) {
-  bHoverName = null;
-  bUpdateSVG(name, bLevels[bTab][name] || 0);
-}
-function bMove(e, name) {
-  const wrap = e.currentTarget;
-  const lv = bGetLevel(e, wrap);
-  bHoverLevel = lv;
-  bUpdateSVG(name, lv);
-}
-function bClick(name) {
-  const lv = bLevels[bTab][name] || 0;
-  if (lv > 0) { delete bLevels[bTab][name]; renderBottle(); return; }
-  bLevels[bTab][name] = bHoverLevel;
-  renderBottle();
+function cwl(text,maxW){
+  const ls=[];let cur='';
+  for(const ch of text){
+    if(ch==='\n'){ls.push(cur);cur='';continue;}
+    if(cctx.measureText(cur+ch).width>maxW&&cur){ls.push(cur);cur=ch;}
+    else cur+=ch;
+  }
+  if(cur)ls.push(cur);
+  return ls;
 }
 
-/* Touch support */
-let touchName = null, touchActive = false;
-function bTouchStart(e, name) { e.preventDefault(); touchName = name; touchActive = true; bHoverName = name; }
-function bTouchMove(e, name) {
-  if (!touchActive) return; e.preventDefault();
-  const touch = e.touches[0];
-  const wrap = document.querySelector(`.bwrap[data-name="${name}"]`);
-  if (!wrap) return;
-  const svg = wrap.querySelector('svg');
-  if (!svg) return;
-  const r = svg.getBoundingClientRect();
-  const bTop = r.top + r.height * .23, bBot = r.top + r.height * .93;
-  const y = Math.max(bTop, Math.min(bBot, touch.clientY));
-  const lv = Math.round(100 - (y - bTop) / (bBot - bTop) * 100);
-  bHoverLevel = lv;
-  bUpdateSVG(name, lv);
-}
-function bTouchEnd(e, name) {
-  if (!touchActive) return; e.preventDefault();
-  touchActive = false;
-  const lv = bLevels[bTab][name] || 0;
-  if (lv > 0) { delete bLevels[bTab][name]; renderBottle(); return; }
-  bLevels[bTab][name] = bHoverLevel;
-  renderBottle();
+function drawChessCell(x,y,w,h,cell,fs){
+  const s=CST[cell.t]||{bg:'#fff',bd:'#ddd',fg:'#555'};
+  crrect(x+CPD,y+CPD,w-CPD*2,h-CPD*2,5,s.bg,s.bd,cell.t==='start'||cell.t==='end'?0:1.4);
+  cctx.font=`500 ${fs}px 'Noto Sans SC',sans-serif`;
+  cctx.fillStyle=s.fg;cctx.textAlign='center';cctx.textBaseline='middle';
+  const ls=cwl(cell.l,w-CPD*2-3);
+  const lh=fs*1.28,tot=ls.length*lh,sy=y+h/2-tot/2+fs*.52;
+  ls.forEach((l,i)=>cctx.fillText(l,x+w/2,sy+i*lh));
 }
 
-function updateBFooter() {
-  let total = 0, filled = 0; const tops = [];
-  [0, 1].forEach(ti => { BOTTLE_CATS[ti].items.forEach(n => { total++; const v = bLevels[ti][n]; if (v > 0) { filled++; if (v >= 70) tops.push(n); } }); });
-  document.getElementById('bfooter').textContent = filled === 0
-    ? '还没有确认任何偏好，移到瓶子上开始'
-    : `已确认 ${filled}/${total} 项${tops.length > 0 ? ' · 非常喜欢：' + tops.slice(0, 5).join(' · ') + (tops.length > 5 ? '…' : '') : ''}`;
+function drawChessCenter(){
+  [{y1:1,y2:4},{y1:5,y2:8}].forEach(({y1,y2})=>{
+    const x=1*(cW+CG)-1,y=y1*(cH+CG)-1,w=(CHESS_COLS-2)*(cW+CG)+1,h=(y2-y1)*(cH+CG)+CG;
+    crrect(x,y,w,h,8,'#f6f3ff','#e0d5f5',1);
+    cctx.save();cctx.globalAlpha=.1;
+    cctx.font=`${cW*1.7}px sans-serif`;
+    cctx.fillStyle='#5030a0';cctx.textAlign='center';cctx.textBaseline='middle';
+    cctx.fillText('✈',CW/2,y+h/2);cctx.restore();
+  });
+  const iy=INNER_ROW*(cH+CG)-2;
+  crrect(-1,iy,CW+2,cH+4,0,'#ece4ff','none',0);
+  cctx.strokeStyle='#c0a8f0';cctx.lineWidth=1.5;
+  cctx.beginPath();cctx.moveTo(0,iy);cctx.lineTo(CW,iy);cctx.stroke();
+  cctx.beginPath();cctx.moveTo(0,iy+cH+4);cctx.lineTo(CW,iy+cH+4);cctx.stroke();
 }
 
-function saveBottleImg() {
-  const btn = document.querySelector('.save-btn');
-  const orig = btn.innerHTML;
-  btn.textContent = '生成中…';
-  html2canvas(document.getElementById('bottle-capture'), { scale: 2, backgroundColor: '#faf8f5', useCORS: true }).then(canvas => {
-    const a = document.createElement('a');
-    a.download = '我的性癖小瓶子.png';
-    a.href = canvas.toDataURL('image/png');
-    a.click();
-    btn.innerHTML = orig;
+function drawChessPawn(rect,isM,slot=0){
+  const{x,y,w,h}=rect;
+  const r=Math.max(7,Math.min(w*.17,12));
+  const cx=slot===0?x+w-r-CPD-1:x+r+CPD+1,cy=y+r+CPD+2;
+  const g=cctx.createRadialGradient(cx-r*.22,cy-r*.22,r*.08,cx,cy,r);
+  if(isM){g.addColorStop(0,'#88bbff');g.addColorStop(1,'#1a60d0');}
+  else{g.addColorStop(0,'#ffaacc');g.addColorStop(1,'#d02870');}
+  cctx.beginPath();cctx.arc(cx,cy,r,0,Math.PI*2);
+  cctx.fillStyle=g;cctx.fill();
+  cctx.strokeStyle='rgba(255,255,255,.75)';cctx.lineWidth=1.5;cctx.stroke();
+  cctx.fillStyle='#fff';
+  cctx.font=`700 ${Math.max(7,r*.78)}px sans-serif`;
+  cctx.textAlign='center';cctx.textBaseline='middle';
+  cctx.fillText(isM?'♂':'♀',cx,cy+.5);
+}
+
+function drawChessBoard(){
+  cctx.clearRect(0,0,CW,CH);
+  const fs=Math.max(6.5,Math.min(cW*.148,11));
+  for(let i=0;i<OUTER.length;i++){
+    const r=oR(i);if(!r)continue;
+    const[row,col]=OPATH[i];
+    if(row===INNER_ROW&&(col===0||col===CHESS_COLS-1))continue;
+    drawChessCell(r.x,r.y,r.w,r.h,OUTER[i],fs);
+    cctx.fillStyle='rgba(0,0,0,.15)';
+    cctx.font=`${Math.max(5.5,cW*.1)}px sans-serif`;
+    cctx.textAlign='left';cctx.textBaseline='bottom';
+    cctx.fillText(i,r.x+CPD+1,r.y+r.h-CPD-1);
+  }
+  drawChessCenter();
+  const ifs=Math.max(6.5,Math.min(cW*.142,11));
+  for(let i=0;i<INNER.length;i++){const r=iR(i);if(!r)continue;drawChessCell(r.x,r.y,r.w,r.h,INNER[i],ifs);}
+  const pm=CP.m,pf=CP.f;
+  if(!pm.inInner){const[row,col]=OPATH[pm.outerPos];const r=row===INNER_ROW&&col===0?iR(0):oR(pm.outerPos);if(r)drawChessPawn(r,true,(!pf.inInner&&pf.outerPos===pm.outerPos)?1:0);}
+  else if(pm.innerPos>=0){const r=iR(pm.innerPos);if(r)drawChessPawn(r,true,(pf.inInner&&pf.innerPos===pm.innerPos)?1:0);}
+  if(!pf.inInner){const[row,col]=OPATH[pf.outerPos];const r=row===INNER_ROW&&col===CHESS_COLS-1?iR(INNER.length-1):oR(pf.outerPos);if(r)drawChessPawn(r,false,0);}
+  else if(pf.innerPos>=0){const r=iR(pf.innerPos);if(r)drawChessPawn(r,false,0);}
+}
+
+let chessAnim=false;
+function animOuter(who,steps,onDone){
+  if(chessAnim){onDone();return;}chessAnim=true;
+  const p=CP[who],max=OUTER.length-1,sign=steps>0?1:-1,total=Math.abs(steps);let moved=0;
+  (function tick(){if(moved>=total){chessAnim=false;onDone();return;}p.outerPos=Math.max(0,Math.min(max,p.outerPos+sign));moved++;drawChessBoard();setTimeout(tick,190);})();
+}
+function animInner(who,path,onDone){
+  if(chessAnim){onDone();return;}chessAnim=true;
+  const p=CP[who];let i=0;
+  (function tick(){if(i>=path.length){chessAnim=false;onDone();return;}p.innerPos=path[i++];drawChessBoard();setTimeout(tick,190);})();
+}
+function calcInnerPath(who,steps){
+  const p=CP[who],dir=who==='m'?1:-1;let pos=p.innerPos;const path=[];
+  for(let i=0;i<steps;i++){
+    pos+=dir;
+    if(pos<0)pos=1;if(pos>INNER.length-1)pos=INNER.length-2;
+    if(who==='m'&&pos>INNER_END)pos=INNER_END-(pos-INNER_END);
+    if(who==='f'&&pos<INNER_END)pos=INNER_END+(INNER_END-pos);
+    pos=Math.max(0,Math.min(INNER.length-1,pos));path.push(pos);
+  }
+  return{path,final:pos,won:pos===INNER_END};
+}
+
+/* dice dots */
+const DPTS={1:[[22,12]],2:[[14,8],[30,16]],3:[[14,8],[22,12],[30,16]],4:[[14,8],[30,8],[14,16],[30,16]],5:[[14,8],[30,8],[22,12],[14,16],[30,16]],6:[[14,7],[30,7],[14,12],[30,12],[14,17],[30,17]]};
+function renderDots(who,n){
+  const g=document.getElementById('dots-'+who);g.innerHTML='';
+  (DPTS[n]||[]).forEach(([cx,cy])=>{
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r','2.2');
+    c.setAttribute('fill','rgba(255,255,255,.9)');c.setAttribute('class','num-in');
+    g.appendChild(c);
+  });
+}
+function animateDice(who,finalN,onDone){
+  const svg=document.getElementById('dice-'+who);
+  svg.classList.remove('shaking');void svg.offsetWidth;svg.classList.add('shaking');
+  let frame=0;
+  const iv=setInterval(()=>{
+    renderDots(who,Math.ceil(Math.random()*6));frame++;
+    if(frame>8){clearInterval(iv);renderDots(who,finalN);svg.addEventListener('animationend',()=>{svg.classList.remove('shaking');onDone();},{once:true});}
+  },55);
+}
+
+const CFACES=['','⚀','⚁','⚂','⚃','⚄','⚅'];
+function rollDice(who){
+  if(chessAnim)return;
+  const n=Math.floor(Math.random()*6)+1;
+  document.getElementById('sub-'+who).textContent='掷出中…';
+  animateDice(who,n,()=>{
+    document.getElementById('sub-'+who).textContent=`掷出 ${CFACES[n]}（${n}点）`;
+    const p=CP[who],res=document.getElementById('dice-result'),wl=who==='m'?'💙 男生':'🩷 女生';
+    res.textContent=`${wl} 掷出 ${CFACES[n]}（${n}点）`;
+    if(p.inInner){
+      const{path,final,won}=calcInnerPath(who,n);
+      animInner(who,path,()=>{res.textContent=`${wl} ${CFACES[n]} → 决赛圈第${final+1}格`;if(won)setTimeout(()=>chessWin(who),300);else setTimeout(()=>showChessPop(null,final,who,'inner'),300);});
+      return;
+    }
+    if(p.atEntry){
+      p.atEntry=false;p.inInner=true;p.innerPos=who==='m'?M_INNER_START:F_INNER_START;
+      const remaining=n-1;
+      if(remaining<=0){drawChessBoard();res.textContent=`${wl} ${CFACES[n]} → 进入决赛圈`;return;}
+      const{path,final,won}=calcInnerPath(who,remaining);
+      drawChessBoard();setTimeout(()=>animInner(who,path,()=>{res.textContent=`${wl} ${CFACES[n]} → 决赛圈第${final+1}格`;if(won)setTimeout(()=>chessWin(who),300);else setTimeout(()=>showChessPop(null,final,who,'inner'),300);}),250);
+      return;
+    }
+    animOuter(who,Math.min(n,OUTER.length-1-p.outerPos),()=>{
+      const cell=OUTER[p.outerPos];res.textContent=`${wl} ${CFACES[n]} → 第${p.outerPos}格`;
+      if(who==='m'&&p.outerPos===M_ENTRY_IDX){p.atEntry=true;res.textContent+=` 到达入口，下轮进决赛圈`;showChessPop(p.outerPos,null,who,'outer');return;}
+      if(who==='f'&&p.outerPos===F_ENTRY_IDX){p.atEntry=true;res.textContent+=` 到达入口，下轮进决赛圈`;showChessPop(p.outerPos,null,who,'outer');return;}
+      if(cell&&cell.t==='back'){
+        let bt=0;if(cell.l.includes('退回')||cell.l.includes('起点'))bt=0;
+        else{const m=cell.l.match(/(\d+)格/);bt=m?Math.max(0,p.outerPos-parseInt(m[1])):Math.max(0,p.outerPos-3);}
+        setTimeout(()=>{res.textContent+=` ← 后退至第${bt}格`;animOuter(who,-(p.outerPos-bt),()=>setTimeout(()=>showChessPop(p.outerPos,null,who,'outer'),200));},400);return;
+      }
+      if(p.outerPos>0&&cell)setTimeout(()=>showChessPop(p.outerPos,null,who,'outer'),300);
+    });
   });
 }
 
-/* ── Chess ── */
-let posM = 0, posF = 0;
-const ROWS = 9, COLS = 10;
-const PATH = [];
-for (let c = 0; c <= 9; c++) PATH.push([0, c]);
-for (let r = 1; r <= 8; r++) PATH.push([r, 9]);
-for (let c = 8; c >= 0; c--) PATH.push([8, c]);
-for (let r = 7; r >= 1; r--) PATH.push([r, 0]);
-for (let c = 1; c <= 8; c++) PATH.push([2, c]);
-
-function buildBoard() {
-  const container = document.getElementById('chess-board');
-  const vw = Math.min(window.innerWidth, 960);
-  const cellSize = Math.max(30, Math.floor((vw - 32) / COLS) - 3);
-  const board = document.createElement('div');
-  board.className = 'board';
-  board.style.gridTemplateColumns = `repeat(${COLS},${cellSize}px)`;
-  board.style.width = (cellSize * COLS + 3 * (COLS - 1)) + 'px';
-
-  for (let r = 0; r < ROWS; r++) {
-    for (let c = 0; c < COLS; c++) {
-      const div = document.createElement('div');
-      div.style.width = cellSize + 'px';
-      div.style.height = cellSize + 'px';
-      let ci = -1;
-      for (let i = 0; i < CHESS_CELLS.length; i++) {
-        if (PATH[i] && PATH[i][0] === r && PATH[i][1] === c) { ci = i; break; }
-      }
-      if (ci >= 0) {
-        const cell = CHESS_CELLS[ci];
-        div.className = 'cell ' + cell.t;
-        div.style.fontSize = Math.max(7, cellSize * 0.16) + 'px';
-        div.innerHTML = cell.l.replace(/\n/g, '<br>');
-        div.dataset.ci = ci;
-        div.onclick = () => showTask(ci);
-        const num = document.createElement('span');
-        num.className = 'cell-num'; num.textContent = ci;
-        div.appendChild(num);
-        if (ci === posM && ci === posF) {
-          div.insertAdjacentHTML('beforeend', `<div class="pawn pawn-m" style="right:${Math.round(cellSize*.28)}px">♂</div><div class="pawn pawn-f">♀</div>`);
-        } else if (ci === posM) {
-          div.insertAdjacentHTML('beforeend', `<div class="pawn pawn-m">♂</div>`);
-        } else if (ci === posF) {
-          div.insertAdjacentHTML('beforeend', `<div class="pawn pawn-f">♀</div>`);
-        }
-      } else {
-        const inner = r >= 1 && r <= 7 && c >= 1 && c <= 8;
-        div.className = inner && r === 4 ? 'cell runway' : 'cell empty';
-        if (inner && r === 4) div.innerHTML = '<span style="color:#acd;font-size:11px">✈</span>';
-      }
-      board.appendChild(div);
-    }
-  }
-  container.innerHTML = '';
-  container.appendChild(board);
-}
-
-function rollDice(g) {
-  const n = Math.floor(Math.random() * 6) + 1;
-  const faces = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
-  const maxPos = CHESS_CELLS.length - 1;
-  if (g === 'm') posM = Math.min(posM + n, maxPos);
-  else posF = Math.min(posF + n, maxPos);
-  const pos = g === 'm' ? posM : posF;
-  document.getElementById('dice-result').textContent =
-    `${g === 'm' ? '💙 男生' : '🩷 女生'}掷出 ${faces[n]}（${n}点），移到第 ${pos} 格`;
-  buildBoard();
-  if (pos > 0 && CHESS_CELLS[pos].t !== 'empty') setTimeout(() => showTask(pos, g), 350);
-  if (pos === maxPos) setTimeout(() => {
-    document.getElementById('task-who').textContent = '🏆 游戏结束';
-    document.getElementById('task-text').textContent = (g === 'm' ? '男生' : '女生') + '先到终点！对方需要转账100元！';
-    document.getElementById('task-popup').classList.add('show');
-  }, 500);
-}
-
-function showTask(ci, who) {
-  const cell = CHESS_CELLS[ci];
-  if (!cell || cell.t === 'empty' || cell.t === 'runway' || cell.t === 'start') return;
-  document.getElementById('task-text').textContent = cell.l.replace(/\n/g, ' ');
-  document.getElementById('task-who').textContent = who === 'm' ? '💙 男生的任务' : who === 'f' ? '🩷 女生的任务' : '📍 格子内容';
+const CBC={special:'tbs',back:'tbb',drink:'tbd',rest:'tbr','f-entry':'tbf','m-entry':'tbm',inner:'tbi',end:'tbe'};
+const CTL={special:'任务',back:'后退',drink:'喝酒',rest:'休息','f-entry':'女生入口','m-entry':'男生入口',inner:'决赛圈',end:'终点'};
+function showChessPop(outerIdx,innerIdx,who,mode){
+  const cell=mode==='inner'?INNER[innerIdx]:OUTER[outerIdx];
+  if(!cell||cell.t==='start')return;
+  document.getElementById('task-who').textContent=who==='m'?'💙 男生的任务':who==='f'?'🩷 女生的任务':'📍 格子内容';
+  const b=document.getElementById('task-badge');b.className='tbadge '+(CBC[cell.t]||'tbs');b.textContent=CTL[cell.t]||'任务';
+  document.getElementById('task-text').textContent=cell.l.replace(/\n/g,' ');
   document.getElementById('task-popup').classList.add('show');
 }
-function closeTask() { document.getElementById('task-popup').classList.remove('show'); }
+function chessWin(who){
+  document.getElementById('task-who').textContent='🏆 游戏结束';
+  document.getElementById('task-badge').className='tbadge tbe';document.getElementById('task-badge').textContent='冠军';
+  document.getElementById('task-text').textContent=(who==='m'?'💙 男生':'🩷 女生')+'先到终点！对方需要转账100元！';
+  document.getElementById('task-popup').classList.add('show');
+}
+function closeTask(){document.getElementById('task-popup').classList.remove('show');}
 
-window.addEventListener('resize', () => {
-  if (document.getElementById('s-chess').classList.contains('active')) buildBoard();
+function setZoom(val){
+  document.getElementById('chess-scaler').style.transform=`scale(${val/100})`;
+  document.getElementById('zoom-val').textContent=val+'%';
+}
+
+chessCanvas.addEventListener('click',e=>{
+  const rc=chessCanvas.getBoundingClientRect();
+  const dpr=window.devicePixelRatio||1;
+  const mx=(e.clientX-rc.left)*(chessCanvas.width/rc.width)/dpr;
+  const my=(e.clientY-rc.top)*(chessCanvas.height/rc.height)/dpr;
+  for(let i=0;i<INNER.length;i++){const r=iR(i);if(!r)continue;if(mx>=r.x&&mx<=r.x+r.w&&my>=r.y&&my<=r.y+r.h){showChessPop(null,i,null,'inner');return;}}
+  for(let i=0;i<OUTER.length;i++){const r=oR(i);if(!r)continue;const[row,col]=OPATH[i];if(row===INNER_ROW&&(col===0||col===CHESS_COLS-1))continue;if(mx>=r.x&&mx<=r.x+r.w&&my>=r.y&&my<=r.y+r.h){showChessPop(i,null,null,'outer');return;}}
 });
+
+function cheatPos(who){
+  if(chessAnim)return;
+  Object.assign(CP[who],{inInner:false,atEntry:false,innerPos:-1});
+  CP[who].outerPos=who==='m'?M_ENTRY_IDX-1:F_ENTRY_IDX-1;
+  drawChessBoard();
+  document.getElementById('dice-result').textContent=`🧪 ${who==='m'?'💙 男生':'🩷 女生'} 已在入口前，骰1点进入`;
+}
+
+window.addEventListener('resize',()=>{if(document.getElementById('s-chess').classList.contains('active')){chessInitSize();drawChessBoard();}});
 </script>
 </body>
 </html>

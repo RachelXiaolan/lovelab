@@ -13,16 +13,16 @@
   --pink:#d4537e;--pink-l:#fdeef4;--pink-m:#f0a0c0;
   --blue:#4a90d9;--blue-l:#eef4fd;--blue-m:#90c0f0;
   --bg:#faf8f5;--bg2:#f2f0ec;--card:#fff;
-  --text:#1a1a2e;--t2:#888;--t3:#bbb;--border:#eee;
+  --text:#1a1a2e;--t2:#666;--t3:#999;--border:#e0ded8;
   --r:14px;--rs:8px;
 }
 html,body{height:100%;overflow:hidden}
-body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
-.screen{display:none;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.screen{display:none;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;overscroll-behavior:contain}
 .screen.active{display:flex}
 /* topbar */
 .topbar{display:flex;align-items:center;padding:.85rem clamp(.9rem,4vw,1.4rem);gap:10px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0}
-.back-btn{display:flex;align-items:center;gap:4px;background:none;border:none;color:var(--t2);cursor:pointer;font-family:'Noto Sans SC',sans-serif;font-size:13px;padding:4px 10px 4px 0;border-radius:6px;transition:background .15s}
+.back-btn{display:flex;align-items:center;gap:4px;background:none;border:none;color:var(--t2);cursor:pointer;font-family:'Noto Sans SC',sans-serif;font-size:13px;padding:10px 14px 10px 4px;border-radius:6px;transition:background .15s;min-height:44px}
 .back-btn:hover{color:var(--text);background:var(--bg2)}
 .back-btn svg{width:15px;height:15px}
 .topbar-title{font-family:'Noto Serif SC',serif;font-size:15px;font-weight:700;color:var(--text)}
@@ -60,7 +60,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 .setup-hint{font-size:12px;color:var(--t3);margin-bottom:.9rem;line-height:1.65;background:var(--bg2);border-radius:var(--rs);padding:.65rem .9rem}
 .add-row{display:flex;gap:8px;margin-bottom:10px}
 .q-inp{flex:1;min-width:0;background:#fafafa;border:1px solid var(--border);border-radius:var(--rs);color:var(--text);font-size:13px;padding:.55rem .85rem;font-family:'Noto Sans SC',sans-serif;-webkit-user-select:text;user-select:text}
-.q-inp:focus{outline:none;border-color:var(--pink)}
+.q-inp:focus{outline:none;border-color:var(--pink);box-shadow:0 0 0 3px rgba(212,83,126,.15)}
 .add-btn{background:var(--card);border:1.5px solid var(--pink);border-radius:var(--rs);color:var(--pink);font-size:12px;padding:.55rem .9rem;cursor:pointer;flex-shrink:0;font-family:'Noto Sans SC',sans-serif;white-space:nowrap}
 .add-btn:hover{background:var(--pink-l)}
 .tag-list{display:flex;flex-wrap:wrap;gap:6px;min-height:22px;margin-bottom:.9rem}
@@ -74,6 +74,21 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 .btn-blue{background:linear-gradient(135deg,#4a90d9,#60b0e8)}
 .btn-pink{background:linear-gradient(135deg,#d4567a,#e8906a)}
 .small-hint{font-size:11px;color:var(--t3);text-align:center;margin-top:.5rem}
+
+/* STAGE SELECT */
+#s-stage .sbody{flex:1;overflow-y:auto;padding:1.1rem clamp(.9rem,4vw,1.4rem) 2rem;display:flex;flex-direction:column;align-items:center}
+.stage-list{display:flex;flex-direction:column;gap:14px;width:100%;max-width:500px}
+.scard{background:var(--card);border-radius:var(--r);padding:1.2rem 1.3rem;cursor:pointer;display:flex;align-items:center;gap:14px;border:1.5px solid transparent;box-shadow:0 2px 16px rgba(0,0,0,.05);transition:transform .15s,box-shadow .15s}
+.scard:active{transform:scale(.97)}
+.scard.sc-crush{border-color:#f0d0dc}.scard.sc-couple{border-color:#f0d8c0}.scard.sc-spicy{border-color:#d8d0f0}
+.sc-icon{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sc-icon svg{width:22px;height:22px}
+.sc-crush .sc-icon{background:#fdeef3}.sc-couple .sc-icon{background:#fef3ea}.sc-spicy .sc-icon{background:#eeeafc}
+.sc-info{flex:1;min-width:0}
+.sc-name{font-family:'Noto Serif SC',serif;font-size:16px;font-weight:700;margin-bottom:2px}
+.sc-crush .sc-name{color:#d04070}.sc-couple .sc-name{color:#c06020}.sc-spicy .sc-name{color:#7040c0}
+.sc-desc{font-size:12px;color:var(--t2);line-height:1.5}
+.sc-qcount{font-size:10.5px;color:var(--t3);margin-top:3px}
 
 /* TRUTH GAME */
 #s-truth .tbody{flex:1;overflow-y:auto;padding:.9rem clamp(.75rem,3vw,1.1rem)}
@@ -145,7 +160,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 @keyframes numIn{0%{transform:scale(.4);opacity:0}65%{transform:scale(1.25)}100%{transform:scale(1);opacity:1}}
 .shaking{animation:dShake .5s cubic-bezier(.36,.07,.19,.97)}
 .num-in{animation:numIn .28s ease forwards}
-/* popup */
+@media(prefers-reduced-motion:reduce){.shaking,.num-in{animation:none}.ecard:active,.scard:active,.primary-btn:active,.nq-btn:active,.dp:active{transform:none}}/* popup */
 .popup-bg{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.45);align-items:flex-end;justify-content:center}
 .popup-bg.show{display:flex}
 @media(min-width:600px){.popup-bg{align-items:center}.task-card{border-radius:var(--r)!important;max-width:380px!important;margin:1.5rem}}
@@ -169,7 +184,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
   <div class="home-title">亲密<span>游戏</span></div>
   <div class="home-sub">专为你们设计的升温小游戏合集</div>
   <div class="entry-list">
-    <div class="ecard c1" onclick="go('s-setup')">
+    <div class="ecard c1" onclick="go('s-stage')">
       <div class="eicon"><svg viewBox="0 0 24 24" fill="none" stroke="#d04070" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
       <div class="einfo"><div class="etitle">真心话</div><div class="edesc">三个阶段 · 男女各自答题<br>可以加自己想问的专属问题</div></div>
       <div class="earrow">›</div>
@@ -188,16 +203,55 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 </div></div>
 </div>
 
+<!-- STAGE SELECT -->
+<div class="screen" id="s-stage">
+  <div class="topbar">
+    <button class="back-btn" onclick="go('s-home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</button>
+    <span class="topbar-title">真心话 · 选择阶段</span>
+  </div>
+  <div class="sbody">
+    <div class="stage-list">
+      <div class="scard sc-crush" onclick="pickStage('crush')">
+        <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d04070" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div class="sc-info">
+          <div class="sc-name">暧昧期</div>
+          <div class="sc-desc">试探心意 · 轻松不越界</div>
+          <div class="sc-qcount">约 16 题 · 男女通用</div>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="scard sc-couple" onclick="pickStage('couple')">
+        <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#c06020" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="sc-info">
+          <div class="sc-name">情侣</div>
+          <div class="sc-desc">深度了解 · 亲密升温</div>
+          <div class="sc-qcount">约 16 题 · 男女通用</div>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="scard sc-spicy" onclick="pickStage('spicy')">
+        <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#7040c0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div class="sc-info">
+          <div class="sc-name">开放</div>
+          <div class="sc-desc">脸红心跳 · 尺度升级</div>
+          <div class="sc-qcount">约 18 题 · 男女不同</div>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- TRUTH SETUP -->
 <div class="screen" id="s-setup">
   <div class="topbar">
-    <button class="back-btn" onclick="go('s-home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</button>
-    <span class="topbar-title">真心话 · 准备</span>
+    <button class="back-btn" onclick="go('s-stage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</button>
+    <span class="topbar-title">真心话 · <span id="setup-stage-name">暧昧期</span> · 准备</span>
   </div>
   <div class="sbody">
     <div class="setup-step active" id="step-m">
       <div class="setup-card">
-        <div class="setup-who-row"><div class="who-avatar m">💙</div><div class="who-name m">男生的专属题目</div></div>
+        <div class="setup-who-row"><div class="who-avatar m"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3a70b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/></svg></div><div class="who-name m">男生的专属题目</div></div>
         <div class="setup-hint">在这里添加你想问男生的问题。加完点「保存并交给对方」，题目会隐藏，再让女生添加她的题目。也可以不加，直接继续。</div>
         <div class="add-row">
           <input class="q-inp" id="inp-m" placeholder="输入想问男生的问题…" onkeydown="if(event.key==='Enter')addQ('m')">
@@ -210,7 +264,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
     </div>
     <div class="setup-step" id="step-f">
       <div class="setup-card">
-        <div class="setup-who-row"><div class="who-avatar f">🩷</div><div class="who-name f">女生的专属题目</div></div>
+        <div class="setup-who-row"><div class="who-avatar f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c04070" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 6a5 5 0 0 0-10 0c0 2.5 3 4.5 5 4.5s5-2 5-4.5"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg></div><div class="who-name f">女生的专属题目</div></div>
         <div class="saved-banner"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>男生的题目已保存，内容已隐藏</div>
         <div class="setup-hint">现在轮到女生添加她想问的问题。也可以不加，直接开始游戏。</div>
         <div class="add-row">
@@ -228,17 +282,17 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 <!-- TRUTH GAME -->
 <div class="screen" id="s-truth">
   <div class="topbar">
-    <button class="back-btn" onclick="go('s-home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</button>
-    <span class="topbar-title">真心话</span>
+    <button class="back-btn" onclick="go('s-stage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</button>
+    <span class="topbar-title">真心话 · <span id="truth-stage-name">暧昧期</span></span>
   </div>
   <div class="tbody">
     <div class="truth-cols">
       <div class="t-col">
-        <div class="t-col-hd mh"><span style="font-size:15px">💙</span><span class="t-col-name mc">男生</span><span class="t-col-idx" id="m-idx">1/20</span></div>
+        <div class="t-col-hd mh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3a70b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/></svg><span class="t-col-name mc">男生</span><span class="t-col-idx" id="m-idx">1/20</span></div>
         <div class="t-col-body"><div class="q-box"><div class="q-text q-ph" id="m-q">点击下方按钮开始</div></div><button class="nq-btn btn-m2" onclick="nextQ('m')">下一题</button></div>
       </div>
       <div class="t-col">
-        <div class="t-col-hd fh"><span style="font-size:15px">🩷</span><span class="t-col-name fc">女生</span><span class="t-col-idx" id="f-idx">1/20</span></div>
+        <div class="t-col-hd fh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c04070" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M17 6a5 5 0 0 0-10 0c0 2.5 3 4.5 5 4.5s5-2 5-4.5"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg><span class="t-col-name fc">女生</span><span class="t-col-idx" id="f-idx">1/20</span></div>
         <div class="t-col-body"><div class="q-box"><div class="q-text q-ph" id="f-q">点击下方按钮开始</div></div><button class="nq-btn btn-f2" onclick="nextQ('f')">下一题</button></div>
       </div>
     </div>
@@ -302,7 +356,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
             <polygon points="6,12 22,20 22,40 6,32" fill="url(#gm3)" stroke="rgba(0,0,0,.2)" stroke-width=".6"/>
             <g id="dots-m"></g>
           </svg>
-          <div class="dp-info"><div class="dp-name">💙 男生</div><div class="dp-sub" id="sub-m">点击掷骰子</div></div>
+          <div class="dp-info"><div class="dp-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3a70b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:-2px"><circle cx="12" cy="8" r="4"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/></svg> 男生</div><div class="dp-sub" id="sub-m">点击掷骰子</div></div>
         </div>
         <div class="dp df" onclick="rollDice('f')" id="panel-f">
           <svg class="dp-dice" id="dice-f" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
@@ -316,7 +370,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
             <polygon points="6,12 22,20 22,40 6,32" fill="url(#gf3)" stroke="rgba(0,0,0,.2)" stroke-width=".6"/>
             <g id="dots-f"></g>
           </svg>
-          <div class="dp-info"><div class="dp-name">🩷 女生</div><div class="dp-sub" id="sub-f">点击掷骰子</div></div>
+          <div class="dp-info"><div class="dp-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c04070" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:-2px"><path d="M17 6a5 5 0 0 0-10 0c0 2.5 3 4.5 5 4.5s5-2 5-4.5"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg> 女生</div><div class="dp-sub" id="sub-f">点击掷骰子</div></div>
         </div>
       </div>
       <div class="dice-result" id="dice-result">准备好了吗？点击骰子开始！</div>
@@ -340,8 +394,25 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 
 <script>
 /* DATA */
-const QM=["上一次哭是因为什么？","用三个形容词形容一下你自己","最近一年最开心的一件事是什么？","如果墓碑上只能刻一句话，你会刻什么？","做过最丢人的一件事是什么？","你相信男女之间有纯友谊吗？为什么？","你觉得自己最大的缺点是什么？","你有没有什么别人不知道的小习惯？","你最后悔没做的一件事是什么？","你有没有特别羡慕过某个人？羡慕他什么？","你人生中最孤独的一段时光是什么时候？","你最害怕失去的东西是什么？","对方让你觉得心动的三个瞬间是什么？","喜欢对方的三个理由，认真说","说出三个对方的缺点，真实的","精神出轨和肉体出轨，你更能接受哪一个？","什么时候你最想对方？","你觉得我们会谈多久？","在床上你喜欢自己主动还是对方主动？","最喜欢哪个体位？","你有没有什么特别敏感的部位？","更喜欢有毛还是白虎？","最喜欢射在哪里？"];
-const QF=["用三个形容词形容一下你自己","上一次哭是因为什么？","你觉得自己最大的缺点是什么？","做过最丢人的一件事是什么？","你有没有什么别人不知道的小习惯？","你最后悔没做的一件事是什么？","你相信男女之间有纯友谊吗？为什么？","如果墓碑上只能刻一句话，你会刻什么？","你最害怕失去的东西是什么？","如果今晚是你最后一晚，你会做什么？","你有没有一段时间特别讨厌自己？是因为什么？","你人生中最孤独的一段时光是什么时候？","你有没有从来没跟任何人说过的秘密？","对方让你觉得心动的三个瞬间是什么？","喜欢对方的三个理由","说出三个对方的缺点，真实的","精神出轨和肉体出轨，你更能接受哪一个？","在床上你喜欢自己主动还是对方主动？","最喜欢哪个体位？","你有没有什么特别敏感的部位？","粗、长、硬，给你排个顺序","最喜欢被射在哪里？"];
+const STAGES={
+  crush:{name:'暧昧期',color:'#d04070'},
+  couple:{name:'情侣',color:'#c06020'},
+  spicy:{name:'开放',color:'#7040c0'},
+};
+const QBANK={
+  crush:{
+    m:["第一次见到她的时候，你心里在想什么？","你什么时候意识到自己喜欢上她的？","用三个词形容一下你眼中的她","你做过什么傻事想引起她的注意？","你觉得自己最吸引她的一点是什么？","她难过的时候，你会怎么哄她？","你心里有没有一个绝对不能让她知道的小秘密？","如果明天是世界末日，你最想对她说什么？","你有没有偷偷关注过她的社交账号？","第一次牵手的时候，你紧张了吗？","暧昧期最让你心动的瞬间是什么？","你有没有因为她一句话开心一整天？哪句话？","你觉得她能接受你什么样的缺点？","她跟别的男生聊得开心，你会有啥反应？","你觉得她喜欢你什么？","你相信男女之间有纯友谊吗？为什么？"],
+    f:["第一次见到他的时候，你心里在想什么？","你什么时候意识到自己喜欢上他的？","用三个词形容一下你眼中的他","你做过什么小心机想引起他的注意？","你觉得自己最吸引他的一点是什么？","你难过的时候，最希望他怎么哄你？","你心里有没有一个绝对不能让他知道的小秘密？","如果明天是世界末日，你最想对他说什么？","你有没有偷偷关注过他的社交账号？","第一次牵手的时候，你是什么感觉？","暧昧期最让你心动的瞬间是什么？","你有没有因为他一句话开心一整天？哪句话？","你觉得他能接受你什么样的缺点？","他跟别的女生聊得开心，你会有啥反应？","你觉得他喜欢你什么？","你相信男女之间有纯友谊吗？为什么？"],
+  },
+  couple:{
+    m:["上一次哭是因为什么？","你觉得一段感情里最重要的是什么？","你觉得自己最大的缺点是什么？","对方让你心动的三个瞬间，说具体一点","喜欢对方的三个理由，认真说","说出三个对方的缺点，真实的","你觉得你们会谈多久？","你最害怕失去对方的原因是什么？","有没有羡慕过别人家的女朋友？羡慕什么？","你最想和对方一起做但还没做的事是什么？","吵架的时候你是先低头还是等对方低头？","你觉得仪式感重要吗？做过最有仪式感的事是什么？","如果对方家人不喜欢你，你会怎么做？","你最想带对方去旅行的地方是哪里？","如果有一天感情变淡了，你会怎么挽回？","你愿意为对方改变自己到什么程度？"],
+    f:["上一次哭是因为什么？","你觉得一段感情里最重要的是什么？","你觉得自己最大的缺点是什么？","对方让你心动的三个瞬间，说具体一点","喜欢对方的三个理由，认真说","说出三个对方的缺点，真实的","你觉得你们会谈多久？","你最害怕失去对方的原因是什么？","有没有羡慕过别人家的男朋友？羡慕什么？","你最想和对方一起做但还没做的事是什么？","吵架的时候你是先低头还是等对方低头？","你觉得仪式感重要吗？对方做过最让你感动的事是什么？","如果你家人不喜欢他，你会怎么办？","你最想和他去旅行的地方是哪里？","如果有一天感情变淡了，你会怎么挽回？","你愿意为对方改变自己到什么程度？"],
+  },
+  spicy:{
+    m:["在床上你喜欢自己主动还是对方主动？为什么？","最喜欢哪个体位？为什么？","你有没有什么特别敏感的部位？说出来","更喜欢有毛还是白虎？","最喜欢射在哪里？为什么？","口和被口，你更喜欢哪个？","你有没有性幻想过别人？是谁？","看片的时候最喜欢什么类型？","你觉得一次完美的前戏应该有多久？","你最想尝试但还没试过的玩法是什么？","粗、长、硬，给你排个顺序——你觉得自己哪项最强？","做爱的时候你最喜欢对方说什么？","你最尴尬的一次床上经历是什么？","有没有偷偷幻想过对方的朋友？","你觉得自己的性能力巅峰是多少岁？","如果对方说今晚不想做，你什么反应？","用一句话描述你的床上风格","你最想对方穿什么来撩你？"],
+    f:["在床上你喜欢自己主动还是对方主动？为什么？","最喜欢哪个体位？为什么？","你有没有什么特别敏感的部位？说出来","更喜欢有毛还是白虎？","最喜欢被射在哪里？为什么？","口和被口，你更喜欢哪个？","你有没有性幻想过别人？是谁？","你看过片吗？喜欢什么类型？","你觉得一次完美的前戏应该有多久？","你最想尝试但还没试过的玩法是什么？","粗、长、硬，你最看重哪个？为什么？","做爱的时候你最喜欢对方说什么？","你最尴尬的一次床上经历是什么？","有没有偷偷幻想过对方的兄弟或朋友？","你觉得自己的性欲算强吗？","如果对方说今晚不想做，你什么反应？","用一句话描述你的床上风格","你最想对方穿什么来撩你？"],
+  },
+};
 
 const BCATS=[
   {name:'行为偏好',items:['舌吻','被舔耳朵','被舔乳头','指交/帮撸','被口','帮对方口','种草莓','S属性','M属性','女上位','传教士','后入','肛交','乳交','无套','内射','口爆','潮吹','性窒息','打屁股','下流话','制服','3P/群P','公共场合','道具','录像/拍照','角色扮演']},
@@ -349,12 +420,19 @@ const BCATS=[
 ];
 
 /* ── NAV ── */
+let currentStage='crush';
 function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   if(id==='s-chess'){initChess();}
   if(id==='s-bottle')renderBottle();
-  if(id==='s-setup'){document.getElementById('step-m').classList.add('active');document.getElementById('step-f').classList.remove('active');}
+  if(id==='s-setup'){document.getElementById('step-m').classList.add('active');document.getElementById('step-f').classList.remove('active');document.getElementById('setup-stage-name').textContent=STAGES[currentStage].name;}
+}
+function pickStage(key){
+  currentStage=key;
+  customM=[];customF=[];mQueue=[];fQueue=[];mIdx=0;fIdx=0;
+  renderTags('m');renderTags('f');
+  go('s-setup');
 }
 
 /* ── TRUTH ── */
@@ -364,7 +442,7 @@ function renderTags(g){const arr=g==='m'?customM:customF;document.getElementById
 function delQ(g,i){(g==='m'?customM:customF).splice(i,1);renderTags(g);}
 function saveStepM(){document.getElementById('step-m').classList.remove('active');document.getElementById('step-f').classList.add('active');}
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
-function startTruth(){mQueue=shuffle([...QM,...customM]);fQueue=shuffle([...QF,...customF]);mIdx=0;fIdx=0;renderQ('m');renderQ('f');go('s-truth');}
+function startTruth(){const qb=QBANK[currentStage];mQueue=shuffle([...qb.m,...customM]);fQueue=shuffle([...qb.f,...customF]);mIdx=0;fIdx=0;renderQ('m');renderQ('f');document.getElementById('truth-stage-name').textContent=STAGES[currentStage].name;go('s-truth');}
 function renderQ(g){const q=g==='m'?mQueue[mIdx]:fQueue[fIdx];const idx=g==='m'?mIdx:fIdx;const tot=g==='m'?mQueue.length:fQueue.length;const el=document.getElementById(g+'-q');el.textContent=q||'题目已全部完成 🎉';el.className='q-text'+(q?'':' q-ph');document.getElementById(g==='m'?'m-idx':'f-idx').textContent=`${idx+1}/${tot}`;}
 function nextQ(g){if(g==='m')mIdx=(mIdx+1)%mQueue.length;else fIdx=(fIdx+1)%fQueue.length;renderQ(g);}
 
@@ -626,7 +704,7 @@ function rollDice(who){
   document.getElementById('sub-'+who).textContent='掷出中…';
   animateDice(who,n,()=>{
     document.getElementById('sub-'+who).textContent=`掷出 ${CFACES[n]}（${n}点）`;
-    const p=CP[who],res=document.getElementById('dice-result'),wl=who==='m'?'💙 男生':'🩷 女生';
+    const p=CP[who],res=document.getElementById('dice-result'),wl=who==='m'?'男生':'女生';
     res.textContent=`${wl} 掷出 ${CFACES[n]}（${n}点）`;
     if(p.inInner){
       const{path,final,won}=calcInnerPath(who,n);
@@ -660,7 +738,7 @@ const CTL={special:'任务',back:'后退',drink:'喝酒',rest:'休息','f-entry'
 function showChessPop(outerIdx,innerIdx,who,mode){
   const cell=mode==='inner'?INNER[innerIdx]:OUTER[outerIdx];
   if(!cell||cell.t==='start')return;
-  document.getElementById('task-who').textContent=who==='m'?'💙 男生的任务':who==='f'?'🩷 女生的任务':'📍 格子内容';
+  document.getElementById('task-who').textContent=who==='m'?'男生的任务':who==='f'?'女生的任务':'📍 格子内容';
   const b=document.getElementById('task-badge');b.className='tbadge '+(CBC[cell.t]||'tbs');b.textContent=CTL[cell.t]||'任务';
   document.getElementById('task-text').textContent=cell.l.replace(/\n/g,' ');
   document.getElementById('task-popup').classList.add('show');
@@ -668,7 +746,7 @@ function showChessPop(outerIdx,innerIdx,who,mode){
 function chessWin(who){
   document.getElementById('task-who').textContent='🏆 游戏结束';
   document.getElementById('task-badge').className='tbadge tbe';document.getElementById('task-badge').textContent='冠军';
-  document.getElementById('task-text').textContent=(who==='m'?'💙 男生':'🩷 女生')+'先到终点！对方需要转账100元！';
+  document.getElementById('task-text').textContent=(who==='m'?'男生':'女生')+'先到终点！对方需要转账100元！';
   document.getElementById('task-popup').classList.add('show');
 }
 function closeTask(){document.getElementById('task-popup').classList.remove('show');}
@@ -692,7 +770,7 @@ function cheatPos(who){
   Object.assign(CP[who],{inInner:false,atEntry:false,innerPos:-1});
   CP[who].outerPos=who==='m'?M_ENTRY_IDX-1:F_ENTRY_IDX-1;
   drawChessBoard();
-  document.getElementById('dice-result').textContent=`🧪 ${who==='m'?'💙 男生':'🩷 女生'} 已在入口前，骰1点进入`;
+  document.getElementById('dice-result').textContent=`🧪 ${who==='m'?'男生':'女生'} 已在入口前，骰1点进入`;
 }
 
 window.addEventListener('resize',()=>{if(document.getElementById('s-chess').classList.contains('active')){chessInitSize();drawChessBoard();}});
